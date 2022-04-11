@@ -13,3 +13,149 @@
  *= require_tree .
  *= require_self
  */
+ html{
+    font-family: system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans","Liberation Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+    overflow-x: hidden;
+}
+video{
+    width: 100vw;
+    height: 100vh;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    min-width: 100vw;
+    min-height: 100vh;
+    scale: 1.5;
+}
+.remember-now-header{
+    font-weight: 300;
+    font-size: 5rem;
+    margin-bottom: 0;
+    z-index: 30000;
+}
+.header-and-para{
+    position: absolute;
+    top: 40vh;
+    left: 5vw;
+    color: darkorange;
+    text-shadow: 2px 2px black;
+    z-index: 30000;
+}
+.reminder-para{
+    font-weight: 600;
+    font-size: 1.5rem;
+}
+.black-background{
+    background: black;
+    margin-top: 26vh;
+    margin-left: -15px;
+}
+.about-section-container{
+    margin-left: 5rem;
+    display: flex;
+    flex-direction: row;
+    justify-items: space-around;
+    align-items: center;
+    flex-wrap: wrap;
+}
+.about-section-element{
+    width: 100%;
+    margin-top: 7vh;
+}
+.about-section-element-2{
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: space-around;
+}
+.about-section-para{
+    width: 33%;
+    font-size: 2rem;
+}
+li{
+    font-size: 2rem;
+    width: 90%;
+}
+.about-section-h2{
+    font-size: 4rem;
+    font-style: italic;
+}
+.about-section-h3{
+    font-size: 3rem;
+    width: 33vw;
+}
+.about-section-bottom{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: flex-end;
+    color: darkorange;
+}
+.phone-photo{
+    width: 20vw;
+    height: 20vw;
+    background-image: url('phone.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+.about-list{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+.desk-photo{
+    width: 40vw;
+    height: 20vh;
+    background-image: url('desk.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: bottom;
+}
+.bottom-text{
+    font-weight: 600;
+    font-size: 1.5rem;
+    margin-right: 10vw;
+    color: darkorange;
+}
+section{
+    min-height: 98vh; 
+    width: 103vw;
+    overflow-x: hidden;
+}
+.white-text{color: white;}
+.login-signup-header-button{
+    width: 12rem;
+    height: 3rem;
+    border-radius: 43px;
+    background: #009fff;
+    border: 2px solid #009fff;
+    color: white;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: .3s;
+}
+.login-signup-header-button:hover, .login-signup-header-button:focus{
+    background: darkorange;
+    color: black;
+    border: 2px solid black;
+    transition: .3s;
+    padding-bottom: 10px;
+}
+@media only screen and (max-width: 600px) {
+    video{scale: 5;}
+    .remember-now-header{font-size: 2rem;z-index: 30000;}
+    .header-and-para{top: 10vh;z-index: 30000;}
+    .about-section-container{margin-left: 0;}
+    .about-section-h2{font-size: 2rem; margin-left: 1rem; margin-top: 11vh;}
+    .about-section-element-2{flex-direction: column; align-items: center;}
+    .phone-photo{width: 80vw; height: 80vw;}
+    .about-section-para{width: 68%;}
+    .about-section-h3{font-size: 2rem;width: 98vw; margin-left: 1rem;}
+    li{font-size: 1.5rem;}
+    .about-list{flex-direction: column;}
+    .desk-photo{width: 105vw; margin-left: 45vw;}
+    .bottom-text{font-size: 1rem; margin-left: 1rem; margin-top: 5rem;}
+  }
