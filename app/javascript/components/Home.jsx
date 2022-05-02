@@ -2,6 +2,7 @@ import React from 'react'
 import {Link} from 'react-router-dom'
 import VideoPlayer from '../components/VideoPlayer'
 import About from '../components/About'
+import UserProfile from '../components/UserProfile'
 export default class Home extends React.Component{
     constructor(props){
         super(props)
@@ -11,7 +12,12 @@ export default class Home extends React.Component{
             refreshToken: ''
         }
     }
+    componentDidMount(){
 
+    }
+    componentDidUpdate(prevProps, prevState){
+        
+    }
     render(){
         return(
             <div className="homepage-container">
@@ -25,6 +31,9 @@ export default class Home extends React.Component{
                 </section>
                 <section className="black-background">
                     <About />
+                </section>
+                <section>
+                    <UserProfile />
                 </section>
                 <section></section>
             </div>

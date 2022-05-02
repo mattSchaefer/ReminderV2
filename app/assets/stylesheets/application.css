@@ -144,6 +144,45 @@ section{
     transition: .3s;
     padding-bottom: 10px;
 }
+.login-container{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    height: 100vh;
+}
+.login-form-container{
+    width: 33%;
+    border-radius: 3px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 15px;
+}
+.login-button{
+    background: darkorange;
+    height: 2.2rem;
+    margin-top: 10px;
+    cursor: pointer;
+    width: 12rem;
+    border-radius: 3px;
+
+}
+.form-control{
+    line-height: 1.5;
+    height: 2rem;
+}
+label{
+    margin-top: 10px;
+}
+.login-form-span{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+}
 @media only screen and (max-width: 600px) {
     video{scale: 5;}
     .remember-now-header{font-size: 2rem;z-index: 30000;}
