@@ -71,7 +71,7 @@ export default class EditReminderScheduleForm extends React.Component{
         return(
             <div className="edit-reminder-schedule-form-container">
                {time_bubbles}
-               <button className="change-schedule-button circle">change schedule</button>
+               <button className="change-schedule-button circle" onClick={() => this.props.changeUserSubscriptionFor(unique_identifier)}>change schedule</button>
             </div>
         )
     }

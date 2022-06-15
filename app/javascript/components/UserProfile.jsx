@@ -113,7 +113,6 @@ export default class UserProfile extends React.Component{
         }
         for(var i = 0; i < which_sorted.length; i++){
             document.getElementById(which_prefix + '-' + i.toString() ).setAttribute('value', which_sorted[i])
-            console.log((which_prefix + '-' +  + i.toString() + '-' + which_sorted[i].toString()).toString().replaceAll('.','-').replaceAll(' ', '-').replaceAll('--','-'))
             if(document.getElementById((which_prefix + '-' +  + i.toString() + '-' + which_sorted[i].toString()).toString().replaceAll('.','-').replaceAll(' ', '-').replaceAll('--','-'))){
                 document.getElementById((which_prefix + '-' +  + i.toString() + '-' + which_sorted[i].toString()).toString().replaceAll('.','-').replaceAll(' ', '-').replaceAll('--','-')).setAttribute('selected','selected')
             }
@@ -124,13 +123,53 @@ export default class UserProfile extends React.Component{
                     document.getElementById(which_prefix + '-' + i.toString() ).selectedOptions[0].remove()
                     to_afterize.after(clone)
                 }
-                console.log(document.getElementById(which_prefix + '-' +  + i.toString() + '-blank'))
                 document.getElementById(which_prefix + '-' +  + i.toString() + '-blank').setAttribute('selected','selected')
             }
         }
     }
     changeUserSubscriptionFor(which){
-        
+        var arr_of_which = []
+        if(document.getElementById(which + '-0')){
+            arr_of_which.push(document.getElementById(which + '-0').value)
+        }
+        if(document.getElementById(which + '-1')){
+            arr_of_which.push(document.getElementById(which + '-1').value)
+        }
+        if(document.getElementById(which + '-2')){
+            arr_of_which.push(document.getElementById(which + '-2').value)
+        }
+        if(document.getElementById(which + '-3')){
+            arr_of_which.push(document.getElementById(which + '-3').value)
+        }
+        var string_of_which = arr_of_which.filter((a) => {return a.length && a.length > 0}).join()
+       
+        const url = "/change_user_subscriptions"
+        const csrf = document.querySelector('meta[name="csrf-token"]').content
+        const headers = {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'X-CSRF-Token': csrf
+        }
+        const body = JSON.stringify({
+            user_id: this.state.userId,
+            times: string_of_which,
+            reminder_type: which
+        })
+        const options = {
+            method: 'POST',
+            headers: headers,
+            body: body
+        }
+        fetch(url, options)
+        .then((response) => response.json())
+        .then((json) => {
+            console.log(json)
+            //...
+        })
+        .catch((e) => {
+            console.log(e)
+            //...
+        })
     }
     render(){
         return (

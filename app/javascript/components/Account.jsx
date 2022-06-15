@@ -139,7 +139,7 @@ export default class Account extends React.Component{
                                 this.props.editingReminderScheduleFor == reminder_obj.reminder_type.toString() &&
                                 <EditReminderScheduleForm editingFor={this.state.prettySubscriptions.filter((sub)=> {
                                     return sub.sub_type.toString() == reminder_obj.reminder_type.toString()
-                                })} toggleSetReminderTimeValueUI={this.props.toggleSetReminderTimeValueUI} />
+                                })} toggleSetReminderTimeValueUI={this.props.toggleSetReminderTimeValueUI} changeUserSubscriptionFor={this.props.changeUserSubscriptionFor} />
                             }
                         </span>
                     }
@@ -154,7 +154,7 @@ export default class Account extends React.Component{
                             }
                             {
                                 this.props.editingReminderScheduleFor == reminder_obj.reminder_type.toString() &&
-                                <EditReminderScheduleForm editingFor={[{new_subscription: reminder_obj}]} toggleSetReminderTimeValueUI={this.props.toggleSetReminderTimeValueUI} />
+                                <EditReminderScheduleForm editingFor={[{new_subscription: reminder_obj}]} toggleSetReminderTimeValueUI={this.props.toggleSetReminderTimeValueUI} changeUserSubscriptionFor={this.props.changeUserSubscriptionFor} />
                             }
                         </span>
                     }
