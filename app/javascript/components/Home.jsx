@@ -25,17 +25,21 @@ export default class Home extends React.Component{
                     <span className="header-and-para">
                         <h1 className="remember-now-header">RememberNow</h1>
                         <p className="reminder-para">Sometimes all it takes is a small reminder.</p>
-                        <button className="login-signup-header-button">Log-in or Sign-up</button>
+                        <span className="fancy-button-container">
+                            <span className="skewed-strip"></span>
+                            <span className="skewed-strip"></span>
+                            <span className="skewed-strip"></span>
+                            <button className="login-signup-header-button">Log-in or Sign-up</button>
+                        </span>
                     </span>
                     <VideoPlayer />
                 </section>
                 <section className="black-background">
                     <About />
                 </section>
-                <section>
+                <section className="black-background" id="profile-section">
                     <UserProfile />
                 </section>
-                <section></section>
             </div>
         )
     }

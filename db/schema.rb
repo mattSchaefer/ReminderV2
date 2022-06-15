@@ -10,10 +10,17 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_04_18_225051) do
+ActiveRecord::Schema.define(version: 2022_06_05_021450) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "reminder_times", force: :cascade do |t|
+    t.time "time"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.string "reminder_time_string"
+  end
 
   create_table "reminder_user_notification_stagers", force: :cascade do |t|
     t.bigint "reminder_user_id"
@@ -31,6 +38,8 @@ ActiveRecord::Schema.define(version: 2022_04_18_225051) do
     t.time "time"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.bigint "reminder_time_id"
+    t.index ["reminder_time_id"], name: "index_reminder_users_on_reminder_time_id"
   end
 
   create_table "reminders", force: :cascade do |t|
@@ -47,6 +56,19 @@ ActiveRecord::Schema.define(version: 2022_04_18_225051) do
     t.string "password_digest"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.boolean "activated"
+    t.string "activation_token"
+    t.datetime "activation_sent_at"
+    t.string "reset_email_token"
+    t.datetime "reset_email_sent_at"
+    t.string "unconfirmed_email"
+    t.string "reset_phone_token"
+    t.datetime "reset_phone_sent_at"
+    t.string "reset_password_token"
+    t.datetime "reset_password_sent_at"
+    t.string "carrier"
+    t.string "timezone"
   end
 
+  add_foreign_key "reminder_users", "reminder_times"
 end

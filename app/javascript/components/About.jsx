@@ -40,6 +40,7 @@ export default class About extends React.Component{
                             <li>take vitamins/medication</li>
                             <li>exercise</li>
                         </ul>
+                        <h3 className="white-text" id="scroll-down">Scroll down to get started.</h3>
                     </span>
                     <span className="desk-photo"></span>
                 </span>

@@ -17,6 +17,14 @@
     font-family: system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans","Liberation Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
     overflow-x: hidden;
 }
+*{
+    font-family: system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans","Liberation Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+    line-height: 1.2;
+}
+body{
+    padding-left: 0;
+    margin-left: 0;
+}
 video{
     width: 100vw;
     height: 100vh;
@@ -27,8 +35,12 @@ video{
     min-height: 100vh;
     scale: 1.5;
 }
+label{
+    font-weight: 600;
+}
 .remember-now-header{
-    font-weight: 300;
+    font-weight: 600;
+    font-style: italic;
     font-size: 5rem;
     margin-bottom: 0;
     z-index: 30000;
@@ -37,8 +49,8 @@ video{
     position: absolute;
     top: 40vh;
     left: 5vw;
-    color: darkorange;
-    text-shadow: 2px 2px black;
+    color: black;
+    /* text-shadow: 2px 2px black; */
     z-index: 30000;
 }
 .reminder-para{
@@ -47,11 +59,18 @@ video{
 }
 .black-background{
     background: black;
-    margin-top: 26vh;
+    /* margin-top: 26vh; */
     margin-left: -15px;
+}
+.blue-background{
+    background: #009fff
+}
+.orange-background{
+    background: darkorange;
 }
 .about-section-container{
     margin-left: 5rem;
+    margin-top: 10rem;
     display: flex;
     flex-direction: row;
     justify-items: space-around;
@@ -71,10 +90,18 @@ video{
 .about-section-para{
     width: 33%;
     font-size: 2rem;
+    line-height: 1.2;
 }
 li{
     font-size: 2rem;
     width: 90%;
+}
+label{
+    margin-top: 0 !important;
+    margin-right: 5px;
+}
+.fa{
+    margin-left: 5px;
 }
 .about-section-h2{
     font-size: 4rem;
@@ -91,6 +118,26 @@ li{
     justify-content: flex-end;
     align-items: flex-end;
     color: darkorange;
+}
+.account-info-attrs{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    width: 100%;
+}
+.account-info-ele{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
+}
+.account-info-label-and-attr{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
 }
 .phone-photo{
     width: 20vw;
@@ -128,7 +175,117 @@ section{
 .login-signup-header-button{
     width: 12rem;
     height: 3rem;
-    border-radius: 43px;
+    background: black;
+    border: 2px solid #009fff;
+    color: white;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: .3s;
+    transform: skew(-12deg)
+}
+#change-password-button{
+    background: black;
+    border: 2px solid #009fff;
+    color: white;
+    border-radius: 3px;
+    height: 35px;
+    font-weight: 600;
+    padding: 7px;
+    cursor: pointer;
+}
+#delete-account-button{
+    color: red;
+    cursor: pointer;
+}
+#delete-account-button:hover{
+    text-decoration: underline;
+}
+.login-signup-header-button:hover, .login-signup-header-button:focus, .login-button:hover, .login-button:focus, .create-account-button:hover, .create-account-button:focus, .activate-account-button:hover, .activate-account-button:focus{
+    background: #009fff;
+    /* color: black; */
+    border: 2px solid black;
+    transition: .3s;
+    /* padding-bottom: 10px; */
+    padding-right: 20px;
+    font-weight: bold;
+    text-decoration: underline;
+}
+.fancy-button-container{
+    height: 3rem;
+    display: flex;
+    flex-direction: row;
+    width: 15rem;
+}
+.skewed-strip{
+    width: 1rem;
+    height: 2.75rem;
+    background: black;
+    border: 2px solid #009fff;
+    transform: skew(-12deg);
+    margin-right: .25rem;
+}
+.login-container, .create-account-container, .activate-account-container, .account-container{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    min-height: 100vh;
+}
+.login-form-container, .create-account-form-container, .activate-account-form-container{
+    width: 33%;
+    border-radius: 3px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 15px;
+    border: 2px solid #009fff;
+    background: white;
+}
+.account-inner-container{
+    width: 33%;
+    border-radius: 3px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: flex-start;
+    padding: 15px;
+    border: 2px solid #009fff;
+    background: white;
+    min-height: 30rem;
+}
+.subscriptions-container, .account-info-container{
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+}
+.buttons-container{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: flex-end;
+}
+.focus-blend{
+    background: #009fff !important;
+    color: white !important;
+    transition: .3s;
+}
+.login-button, .create-account-button, .activate-account-button{
+    background: darkorange;
+    height: 2.2rem;
+    margin-top: 10px;
+    cursor: pointer;
+    width: 12rem;
+    border-radius: 3px;
+    width: 12rem;
+    height: 3rem;
+    border-radius: 4px;
     background: #009fff;
     border: 2px solid #009fff;
     color: white;
@@ -137,51 +294,101 @@ section{
     cursor: pointer;
     transition: .3s;
 }
-.login-signup-header-button:hover, .login-signup-header-button:focus{
-    background: darkorange;
-    color: black;
-    border: 2px solid black;
-    transition: .3s;
+.avaliable-reminder-list{
+    margin-top: 1rem;
+    padding-left: 10px;
     padding-bottom: 10px;
+    margin-bottom: 2rem;
+    width: 86%;
+    align-self: center;
+    border: 2px solid lightgrey;
 }
-.login-container{
+.edit-reminder-schedule-button{
+    cursor: pointer;
+}
+.edit-reminder-schedule-form-container{
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+
+.form-control{
+    line-height: 1.5 !important;
+    height: 2rem !important;
+    font-weight: 800;
+}
+.reminder-checkbox{
+    cursor: pointer;
+}
+.reminder-ele{
+    margin-bottom: 10px;
+}
+.account-info-header{
     display: flex;
     flex-direction: row;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
-    width: 100vw;
-    height: 100vh;
+    width: 100%;
 }
-.login-form-container{
-    width: 33%;
-    border-radius: 3px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: 15px;
-}
-.login-button{
-    background: darkorange;
-    height: 2.2rem;
-    margin-top: 10px;
+.toggle-show-account-button{
     cursor: pointer;
-    width: 12rem;
-    border-radius: 3px;
-
 }
-.form-control{
-    line-height: 1.5;
-    height: 2rem;
+.subscription-header{
+    margin-bottom: 0;
+    font-size: 1.5rem;
+    margin-top: 2rem;
 }
+.subscription-paragraph{
+    margin-top: .5rem;
+    margin-left: 1rem;
+    padding-right: 2rem;
+}
+.flex-col{display: flex;flex-direction: column;}
 label{
     margin-top: 10px;
 }
-.login-form-span{
+.login-form-span, .create-account-form-span{
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     align-items: flex-start;
+}
+.field-error{
+    /* -webkit-box-shadow: 0px 0px 2px 2px rgba(251, 123, 123, 0.81); 
+    box-shadow: 0px 0px 2px 2px rgba(251, 123, 123, 0.81); */
+    border: 2px solid rgba(255, 49, 49, 0.81);
+}
+#carrier-select, #timezone-select{
+    background: white !important;
+    width: 12rem;
+    height: 2.5rem !important;
+}
+#scroll-down{
+    font-style: italic;
+}
+.circle{
+    border: 1px solid darkgray;
+    border-radius: 12px;
+    padding: 5px;
+    margin-left: 10px;
+}
+.change-schedule-button{
+    width: 8rem;
+    /* height: 2rem;
+    background: black;
+    border: 2px solid #009fff;
+    color: white; */
+    cursor: pointer;
+    transition: .3s;
+    /* transform: skew(-12deg); */
+    margin-top: 1rem;
+    background: white;
+    border-color: black;
+    font-weight: 700;
+}
+select, option{cursor: pointer;}
+hr{
+    width: 98%;
+    border: 1px solid lightgray;
 }
 @media only screen and (max-width: 600px) {
     video{scale: 5;}

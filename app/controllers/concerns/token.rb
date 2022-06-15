@@ -30,6 +30,9 @@ module Token
         def jwt_expired(exception)
             render json: {exception: exception}
         end
+        def secret
+            Rails.application.secrets.secret_key_base
+        end
     private
         
 end

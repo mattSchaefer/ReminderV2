@@ -1,0 +1,9 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Time:</strong>
+  <%= @reminder_time.time %>
+</p>
+
+<%= link_to 'Edit', edit_reminder_time_path(@reminder_time) %> |
+<%= link_to 'Back', reminder_times_path %>
