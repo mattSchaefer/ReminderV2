@@ -5,7 +5,9 @@ class AuthController < ApplicationController
         if @user = User.find_by(email: auth_params[:email]) || @user = User.find_by(phone: auth_params[:phone])
             if @user.authenticate(auth_params[:password])
                 token = build_token(@user.id)
-                render json: {message: "login success", id: @user.id, phone: @user.phone, email: @user.email, token: token, timezone: @user.timezone, carrier: @user.carrier, status: 200}
+                unconf_email = @user.unconfirmed_email || ""
+                unconf_phone = @user.unconfirmed_phone || ""
+                render json: {message: "login success", id: @user.id, phone: @user.phone, email: @user.email, token: token, timezone: @user.timezone, carrier: @user.carrier, unconfirmed_email: unconf_email, unconfirmed_phone: unconf_phone, status: 200}
             else
                 render json: {message: 'unauthorized', status: 505}
             end

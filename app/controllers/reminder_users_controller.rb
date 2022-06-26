@@ -42,7 +42,6 @@ class ReminderUsersController < ApplicationController
         @added_times = []
         for time in @times do
             reminder_user = ReminderUser.new()
-            
             time_lookup = ReminderTime.where(reminder_time_string: time).first
             if !@reminder || !time
                 render json: {error: 'missing params', status: 402}
@@ -50,13 +49,20 @@ class ReminderUsersController < ApplicationController
             reminder_user.reminder_id = @reminder.id
             reminder_user.user_id = params[:user_id]
             reminder_user.reminder_time_id = time_lookup.id
-            
             if reminder_user.save!
-                @added_times.push(reminder_user)
+                obj = {user_id: "", reminder_type: '', id: '', reminder_id: '', time: ''}
+                obj["user_id"] = reminder_user.user_id || ""
+                obj["reminder_type"] = reminder_user.reminder.reminder_type || ""
+                obj["id"] = reminder_user.id || ""
+                obj["reminder_id"] = reminder_user.reminder_id || ""
+                obj["max_per_day"] = reminder_user.reminder.max_per_day || ""
+                if reminder_user.reminder_time
+                    obj["time"] = reminder_user.reminder_time.reminder_time_string || ""
+                end
+                @added_times.push(obj)
             end
         end
         render json: {added_reminder_users: @added_times, status: 200}
-
     end
     def get_instances_of_reminder
         if !reminder_user_params[:reminder_id]

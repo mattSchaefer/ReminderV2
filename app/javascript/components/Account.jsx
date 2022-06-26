@@ -1,5 +1,10 @@
 import React from 'react'
 import EditReminderScheduleForm from '../components/EditReminderScheduleForm';
+import EditEmailForm from '../components/forms/EditEmailForm';
+import EditPhoneForm from '../components/forms/EditPhoneForm';
+import EditTimezoneForm from '../components/forms/EditTimezoneForm';
+import ChangePasswordForm from '../components/forms/ChangePasswordForm';
+import EditCarrierForm from '../components/forms/EditCarrierForm';
 require('isomorphic-fetch')
 export default class Account extends React.Component{
     constructor(props){
@@ -9,11 +14,15 @@ export default class Account extends React.Component{
             subscribedReminders: [],
             prettySubscriptions: [],
             showAccountInfo: 'no',
-            editingReminderScheduleFor: ''
+            editingReminderScheduleFor: '',
+            editingAccount: 'no'
         }
         this.getReminderSubscriptions = this.getReminderSubscriptions.bind(this)
         this.getAvaliableReminders = this.getAvaliableReminders.bind(this)
         this.toggleAccountInfoDisplay = this.toggleAccountInfoDisplay.bind(this)
+        this.confirmUnconfirmedEmail = this.confirmUnconfirmedEmail.bind(this)
+        this.confirmUnconfirmedPhone = this.confirmUnconfirmedPhone.bind(this)
+        //this.toggleEditingAccount = this.toggleEditingAccount.bind(this)
     }
     componentDidMount(){
         this.getAvaliableReminders()
@@ -27,10 +36,14 @@ export default class Account extends React.Component{
         if(prevState.avaliableReminders !== this.state.avaliableReminders){
             this.getReminderSubscriptions()
         }
+        if(prevProps.editingReminderScheduleFor.length > 0 && this.props.editingReminderScheduleFor.length == 0){
+            this.getReminderSubscriptions()
+        }
     }
     toggleAccountInfoDisplay(){
         this.state.showAccountInfo == "yes" ? this.setState({showAccountInfo: 'no'}) : this.setState({showAccountInfo: 'yes'})
     }
+    
     getReminderSubscriptions(){
         var url = "/get_user_subscriptions"
         const csrf = document.querySelector('meta[name="csrf-token"]').content
@@ -82,9 +95,9 @@ export default class Account extends React.Component{
 
         })
     }
-    getTimesForEachSubscription(subscriptions){
+    // toggleEditingAccount(){
 
-    }
+    // }
     
     getAvaliableReminders(){
         var url = '/reminders'
@@ -107,6 +120,76 @@ export default class Account extends React.Component{
         .catch((e) => {
 
         })
+    }
+    confirmUnconfirmedEmail(){
+        var url = "users/confirm_unconfirmed_email"
+        const csrf = document.querySelector('meta[name="csrf-token"]').content
+        var token = document.getElementById('confirm-email-code').value
+        var unconfirmed_email = this.props.unconfirmedEmail.toString()
+        var email = this.props.email.toString()
+        var bearer = this.props.accessToken.toString()
+        console.log(unconfirmed_email)
+        console.log(email)
+        console.log(bearer)
+        var headers = {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'X-CSRF-Token': csrf,
+            'Authorization': "bearer " + bearer
+        }
+        var body = JSON.stringify({
+            email: email,
+            new_email: unconfirmed_email,
+            token: token
+        })
+        var options = {
+            method: "POST",
+            headers: headers,
+            body: body
+        }
+        fetch(url, options)
+        .then((response) => response.json())
+        .then((json) => {
+            console.log(json)
+            if(json.status == 200)
+                this.props.setUnconfirmedEmailStateValue('')
+        })
+        .catch((e) => {console.log(e)})
+    }
+    confirmUnconfirmedPhone(){
+        var url = "users/confirm_unconfirmed_phone"
+        const csrf = document.querySelector('meta[name="csrf-token"]').content
+        var token = document.getElementById('confirm-phone-code').value
+        var unconfirmed_phone = this.props.unconfirmedPhone.toString()
+        var phone = this.props.phone.toString()
+        var bearer = this.props.accessToken.toString()
+        console.log(unconfirmed_phone)
+        console.log(phone)
+        console.log(bearer)
+        var headers = {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'X-CSRF-Token': csrf,
+            'Authorization': "bearer " + bearer
+        }
+        var body = JSON.stringify({
+            phone: phone,
+            new_phone: unconfirmed_phone,
+            token: token
+        })
+        var options = {
+            method: "POST",
+            headers: headers,
+            body: body
+        }
+        fetch(url, options)
+        .then((response) => response.json())
+        .then((json) => {
+            console.log(json)
+            if(json.status == 200)
+                this.props.setUnconfirmedPhoneStateValue('')
+        })
+        .catch((e) => {console.log(e)})
     }
     render(){
         const reminder_eles = this.state.avaliableReminders.map((reminder_obj) => 
@@ -139,7 +222,7 @@ export default class Account extends React.Component{
                                 this.props.editingReminderScheduleFor == reminder_obj.reminder_type.toString() &&
                                 <EditReminderScheduleForm editingFor={this.state.prettySubscriptions.filter((sub)=> {
                                     return sub.sub_type.toString() == reminder_obj.reminder_type.toString()
-                                })} toggleSetReminderTimeValueUI={this.props.toggleSetReminderTimeValueUI} changeUserSubscriptionFor={this.props.changeUserSubscriptionFor} />
+                                })} toggleSetReminderTimeValueUI={this.props.toggleSetReminderTimeValueUI} changeUserSubscriptionFor={this.props.changeUserSubscriptionFor} getReminderSubscriptions={this.getReminderSubscriptions} toggleEditReminderScheduleFor={this.props.toggleEditReminderScheduleFor} />
                             }
                         </span>
                     }
@@ -154,7 +237,7 @@ export default class Account extends React.Component{
                             }
                             {
                                 this.props.editingReminderScheduleFor == reminder_obj.reminder_type.toString() &&
-                                <EditReminderScheduleForm editingFor={[{new_subscription: reminder_obj}]} toggleSetReminderTimeValueUI={this.props.toggleSetReminderTimeValueUI} changeUserSubscriptionFor={this.props.changeUserSubscriptionFor} />
+                                <EditReminderScheduleForm editingFor={[{new_subscription: reminder_obj}]} toggleSetReminderTimeValueUI={this.props.toggleSetReminderTimeValueUI} changeUserSubscriptionFor={this.props.changeUserSubscriptionFor} getReminderSubscriptions={this.getReminderSubscriptions} toggleEditReminderScheduleFor={this.props.toggleEditReminderScheduleFor} />
                             }
                         </span>
                     }
@@ -165,61 +248,119 @@ export default class Account extends React.Component{
             <div className="account-container">
                 <span className="account-inner-container">
                     <div className="subscriptions-container">
-                        <h2 className="subscription-header">Subscriptions</h2>
+                        <h2 className="subscription-header">Your Subscriptions</h2>
                         <p className="subscription-paragraph">Fill out the form below to subscribe to our various reminders.  Your reminder won't arrive at exactly the selected time, but we'll try our best.  Standard messaging rates apply.  This is a free service but feel free to donate.</p>
                         <span className="flex-col avaliable-reminder-list">
                             {reminder_eles}
-                            
-                            {/* {subscription_eles} */}
                         </span>
                     </div>
                     <hr />
                     <div className="account-info-container">
                         <span className="account-info-header">
-                            <h1>Account Info</h1>
+                            <h1 className="header-flex">
+                                Account Info
+                                {(this.props.unconfirmedEmail.length > 0 || this.props.unconfirmedPhone.length > 0) && <span className="circle exclaim-warning">!</span>}
+                            </h1>
                             <span className="toggle-show-account-button" onClick={this.toggleAccountInfoDisplay}>[{this.state.showAccountInfo == 'no' ? 'show' : 'hide'}]</span>
                         </span>
                         {
+                            this.props.unconfirmedPhone.length > 0 && 
+                            <span className="confirm-unconfirmed-phone-container">
+                                <h3>Confirm your phone number</h3>
+                                <label>Enter the code we sent to your phone:</label>
+                                <input className="form-control" id="confirm-phone-code"></input>
+                                <button className="form-control circle" id="confirm-phone-submit" onClick={this.confirmUnconfirmedPhone}>Submit</button>
+                                <span className="confirm-email-resend-code">[resend code]</span>
+                            </span>
+                        }
+                        {
+                            this.props.unconfirmedEmail.length > 0 && 
+                            <span className="confirm-unconfirmed-email-container">
+                                <h3>Confirm your email address</h3>
+                                <label>Enter the code we sent to your email address:</label>
+                                <input className="form-control" id="confirm-email-code"></input>
+                                <button className="form-control circle" id="confirm-email-submit" onClick={this.confirmUnconfirmedEmail}>Submit</button>
+                                <span className="confirm-email-resend-code">[resend code]</span>
+                            </span>
+                        }
+                        {
                             this.state.showAccountInfo == 'yes' &&
-                            <div className="account-info-attrs">    
+                            <div className="account-info-attrs">
+                                <hr />    
                                 <span className="account-info-ele">
                                     <span className="account-info-label-and-attr">
                                         <label>email:</label>
                                         <span>{this.props.email}</span>
                                     </span>
-                                    <span><i className="fa fa-pencil"></i></span>
+                                    <span onClick={() => this.props.toggleEditingAccount('email')}><i className="fa fa-pencil"></i></span>
                                 </span>
                                 <span className="account-info-ele">
                                     <span className="account-info-label-and-attr">
                                         <label>phone:</label>
                                         <span>{this.props.phone}</span>
                                     </span>
-                                    <span><i className="fa fa-pencil"></i></span>
+                                    <span onClick={() => this.props.toggleEditingAccount('phone')}><i className="fa fa-pencil"></i></span>
                                 </span>
                                 <span className="account-info-ele">
                                     <span className="account-info-label-and-attr">
                                         <label>carrier:</label>
                                         <span>{this.props.carrier}</span>
                                     </span>
-                                    <span><i className="fa fa-pencil"></i></span>
+                                    <span onClick={() => this.props.toggleEditingAccount('carrier')}><i className="fa fa-pencil"></i></span>
                                 </span>
                                 <span className="account-info-ele">
                                     <span className="account-info-label-and-attr">
                                         <label>timezone:</label>
                                         <span>{this.props.timezone}</span>
                                     </span>
-                                    <span><i className="fa fa-pencil"></i></span>
+                                    <span onClick={() => this.props.toggleEditingAccount('timezone')}><i className="fa fa-pencil"></i></span>
                                 </span>
                                 <span className="buttons-container">
                                     <span className="account-info-ele change-password-container">
-                                        <button id="change-password-button">Change Password</button>
+                                        <span id="change-password-button" onClick={() => this.props.toggleEditingAccount('password')}>[Change Password]</span>
                                     </span>
                                     <span className="account-info-ele delete-account-container">
-                                        <span id="delete-account-button">[Delete Account]</span>
+                                        <span id="delete-account-button" onClick={() => this.props.toggleEditingAccount('delete')}>[Delete Account]</span>
                                     </span>
                                 </span>
+                                {
+                                    this.props.editingAccountFor == "email" && this.props.unconfirmedEmail == '' &&
+                                    <div>
+                                        <hr />
+                                        <EditEmailForm email={this.props.email} accessToken={this.props.accessToken} setUnconfirmedEmailStateValue={this.props.setUnconfirmedEmailStateValue} />
+                                    </div>
+                                }
+                                {
+                                    this.props.editingAccountFor == "phone" && this.props.unconfirmedPhone == '' &&
+                                    <div>
+                                        <hr />
+                                        <EditPhoneForm phone={this.props.phone} accessToken={this.props.accessToken} setUnconfirmedPhoneStateValue={this.props.setUnconfirmedPhoneStateValue} />
+                                    </div>
+                                }
+                                {
+                                    this.props.editingAccountFor == "password" &&
+                                    <div className="full-width">
+                                        <hr />
+                                        <ChangePasswordForm email={this.props.email} phone={this.props.phone} accessToken={this.props.accessToken} />
+                                    </div>
+                                }
+                                {
+                                    this.props.editingAccountFor == "carrier" &&
+                                    <div>
+                                        <hr />
+                                        <EditCarrierForm carrier={this.props.carrier} email={this.props.email} accessToken={this.props.accessToken} setCarrier={this.props.setCarrier} />
+                                    </div>
+                                }
+                                {
+                                    this.props.editingAccountFor == "timezone" &&
+                                    <div>
+                                        <hr />
+                                        <EditTimezoneForm timezone={this.props.timezone} email={this.props.email} accessToken={this.props.accessToken} setTimezone={this.props.setTimezone} />
+                                    </div>
+                                }
                             </div>
                         }
+                        
                     </div>
                 </span>
             </div>

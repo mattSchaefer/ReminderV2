@@ -26,6 +26,17 @@ module Token
     def expiration_frame
         6000
     end
+    def authorize_token(token, user_id)
+        decoded = decode_token(token)
+        expired = DateTime.now.to_i > decoded[0]['exp']
+        return_data = {expired: expired, decoded: decoded}
+        if decoded[0]['data'].to_s == user_id.to_s && User.find(user_id).activated && User.find(user_id).activated == true && expired === false
+            return_data = {message: 'authorized', status: 200}
+        else
+            return_data = {message: 'not authorized', status: 500}
+        end
+        return_data
+    end
     protected
         def jwt_expired(exception)
             render json: {exception: exception}

@@ -184,7 +184,7 @@ section{
     transition: .3s;
     transform: skew(-12deg)
 }
-#change-password-button{
+#change-email-button{
     background: black;
     border: 2px solid #009fff;
     color: white;
@@ -193,6 +193,9 @@ section{
     font-weight: 600;
     padding: 7px;
     cursor: pointer;
+}
+.change-password-container{
+    align-self: flex-start;
 }
 #delete-account-button{
     color: red;
@@ -217,6 +220,25 @@ section{
     flex-direction: row;
     width: 15rem;
 }
+.exclaim-warning{
+    color: red !important;
+    border: 2px solid red !important;
+    width: 0.75rem;
+    display: flex;
+    align-self: flex-end;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    font-size: .75rem;
+    font-weight: 700;
+}
+.header-flex{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
 .skewed-strip{
     width: 1rem;
     height: 2.75rem;
@@ -225,7 +247,7 @@ section{
     transform: skew(-12deg);
     margin-right: .25rem;
 }
-.login-container, .create-account-container, .activate-account-container, .account-container{
+.login-container, .create-account-container, .activate-account-container, .account-container, .forgot-container, .reset-password-container{
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -233,7 +255,7 @@ section{
     width: 100vw;
     min-height: 100vh;
 }
-.login-form-container, .create-account-form-container, .activate-account-form-container{
+.login-form-container, .create-account-form-container, .activate-account-form-container, .forgot-form-container, .reset-password-form-container{
     width: 33%;
     border-radius: 3px;
     display: flex;
@@ -371,6 +393,15 @@ label{
     padding: 5px;
     margin-left: 10px;
 }
+.confirm-unconfirmed-email-container, .confirm-unconfirmed-phone-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: flex-start;
+    align-self: center;
+    min-height: 15rem;
+    margin-left: 1rem;
+}
 .change-schedule-button{
     width: 8rem;
     /* height: 2rem;
@@ -385,10 +416,43 @@ label{
     border-color: black;
     font-weight: 700;
 }
-select, option{cursor: pointer;}
+select, option button{cursor: pointer;}
 hr{
     width: 98%;
     border: 1px solid lightgray;
+}
+.fa-pencil, #change-password-button{
+    cursor: pointer;
+}
+.change-password-form-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    width: 100%;
+}
+.full-width{width: 100%;}
+.good-to-go{align-self: center;}
+.forgot-password-button{
+   
+}
+.forgot-reset-password-container{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    width: 46%;
+}
+.forgot-password-paragraph-container{
+    justify-content: center !important;
+    align-items: center !important;
+}
+.forgot-password-paragraph{
+    width: 80%;
+}
+.forgot-password-submit-button-span, .reset-password-submit-button-span{
+    width: 12rem;
+    margin-top: 1rem;
 }
 @media only screen and (max-width: 600px) {
     video{scale: 5;}

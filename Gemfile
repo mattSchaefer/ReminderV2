@@ -24,6 +24,8 @@ gem 'bcrypt', '~> 3.1.7'
 gem "jwt"
 gem 'whenever', require: false
 gem "httparty"
+gem 'figaro'
+gem 'sms-easy'
 # Use Active Storage variant
 # gem 'image_processing', '~> 1.2'
 

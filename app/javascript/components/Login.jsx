@@ -5,7 +5,8 @@ export default class Login extends React.Component{
     constructor(props){
         super(props)
         this.state = {
-            formError: 'no'
+            formError: 'no',
+            view: 'login'
         }
         this.login = this.login.bind(this)
     }
@@ -50,8 +51,9 @@ export default class Login extends React.Component{
         .then((response) => response.json())
         .then((json) => {
             console.log(json)
+           
             if(json.status == 200){
-                this.props.setUser(json.id, json.phone, json.email, json.timezone, json.carrier)
+                this.props.setUser(json.id, json.phone, json.email, json.timezone, json.carrier, json.token.token, json.unconfirmed_email, json.unconfirmed_phone)
             }else{
                 this.setState({formError: 'yes'})
             }
@@ -79,6 +81,10 @@ export default class Login extends React.Component{
                     <input className="form-control" type="password" id="login-password"></input>
                 </span>
                 <p>New here? <Link to="#" tabIndex="0"  onClick={this.props.toggleCreate}>Create an account</Link></p>
+                <span className="forgot-reset-password-container">
+                    <Link to="#" tabIndex="0" className="forgot-password-button" onClick={this.props.toggleForgotPassword}>Forgot password</Link>
+                    <Link to="#" tabIndex="0" className="reset-password-button" onClick={this.props.toggleResetPassword}>Reset password</Link>
+                </span>
                 <button className="login-button" id="login-button" onClick={this.login}>Log-in</button>
             </div>
         </div>

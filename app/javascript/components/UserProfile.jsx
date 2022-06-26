@@ -2,6 +2,8 @@ import React from 'react'
 import Login from '../components/Login'
 import Account from '../components/Account'
 import CreateAccount from '../components/CreateAccount'
+import ForgotPassword from '../components/forms/ForgotPassword'
+import ResetPassword from '../components/forms/ResetPassword'
 export default class UserProfile extends React.Component{
     constructor(props){
         super(props)
@@ -11,46 +13,113 @@ export default class UserProfile extends React.Component{
             phone: "",
             signedIn: "no",
             createAccountToggle: "no",
-            editingReminderScheduleFor: ''
+            forgotPasswordToggle: "no",
+            resetPasswordToggle: "no",
+            editingReminderScheduleFor: '',
+            accessToken: '',
+            unconfirmedEmail: '',
+            unconfirmedPhone: ''
         }
         this.toggleCreateAccount = this.toggleCreateAccount.bind(this)
+        this.toggleForgotPassword = this.toggleForgotPassword.bind(this)
+        this.toggleResetPassword = this.toggleResetPassword.bind(this)
         this.toggleSignedIn = this.toggleSignedIn.bind(this)
         this.setUser = this.setUser.bind(this)
         this.toggleEditReminderScheduleFor = this.toggleEditReminderScheduleFor.bind(this)
         this.toggleSetReminderTimeValueUI = this.toggleSetReminderTimeValueUI.bind(this)
+        this.goBackToLogin = this.goBackToLogin.bind(this)
         this.sortEditingReminderTimeValuesUI = this.sortEditingReminderTimeValuesUI.bind(this)
         this.changeUserSubscriptionFor = this.changeUserSubscriptionFor.bind(this)
+        this.toggleEditingAccount = this.toggleEditingAccount.bind(this)
+        //this.confirmUnconfirmedEmail = this.confirmUnconfirmedEmail.bind(this)
+        this.setUnconfirmedEmailStateValue = this.setUnconfirmedEmailStateValue.bind(this)
+        this.setEmail = this.setEmail.bind(this)
+        this.setPhone = this.setPhone.bind(this)
+        this.setCarrier = this.setCarrier.bind(this)
+        this.setTimezone = this.setTimezone.bind(this)
+        this.setUnconfirmedPhoneStateValue = this.setUnconfirmedPhoneStateValue.bind(this)
     }
     componentDidMount(){
 
     }
     componentDidUpdate(prevProps, prevState){
-
+        if(prevState.unconfirmedEmail.length > 0 && this.state.unconfirmedEmail.length == 0){
+            this.setEmail(prevState.unconfirmedEmail)
+        }
+        if(prevState.unconfirmedPhone.length > 0 && this.state.unconfirmedPhone.length == 0){
+            this.setPhone(prevState.unconfirmedPhone)
+        }
+        if(prevState.forgotPasswordToggle == "no" && this.state.forgotPasswordToggle == "yes"){
+            this.setState({resetPasswordToggle: 'no'})
+        }
+        if(prevState.resetPasswordToggle == "no" && this.state.resetPasswordToggle == "yes"){
+            this.setState({forgotPasswordToggle: 'no'})
+        }
+    }
+    setEmail(value){
+        this.setState({email: value})
+    }
+    setPhone(value){
+        this.setState({phone: value})
+    }
+    setCarrier(value){
+        this.setState({carrier: value})
+    }
+    setTimezone(value){
+        this.setState({timezone: value})
     }
     toggleCreateAccount(){
         this.state.createAccountToggle == "no" ? this.setState({createAccountToggle: "yes"}) : this.setState({createAccountToggle: "no"})
     }
+    toggleForgotPassword(){
+        this.state.forgotPasswordToggle == "no" ? this.setState({forgotPasswordToggle: "yes"}) : this.setState({forgotPasswordToggle: 'yes'})
+    }
+    toggleResetPassword(){
+        this.state.resetPasswordToggle == "no" ? this.setState({resetPasswordToggle: "yes"}) : this.setState({resetPasswordToggle: 'no'})
+    }
+    goBackToLogin(){
+        this.setState({
+            userId: 0,
+            email: "",
+            phone: "",
+            signedIn: "no",
+            createAccountToggle: "no",
+            forgotPasswordToggle: "no",
+            resetPasswordToggle: "no",
+            editingReminderScheduleFor: '',
+            accessToken: '',
+            unconfirmedEmail: '',
+            unconfirmedPhone: ''
+        })
+    }
     toggleSignedIn(){}
-    setUser(id, phone, email, timezone, carrier){
+    setUser(id, phone, email, timezone, carrier, token, unconfirmedEmail, unconfirmedPhone){
         this.setState({
             userId: id,
             email: email,
             phone: phone,
             timezone: timezone,
             carrier: carrier,
-            signedIn: "yes"
+            signedIn: "yes",
+            editingAccountWhich: "",
+            accessToken: token,
+            unconfirmedEmail: unconfirmedEmail,
+            unconfirmedPhone: unconfirmedPhone
         })
     }
     toggleEditReminderScheduleFor(reminder_type){
         this.setState({editingReminderScheduleFor: reminder_type})
     }
     toggleSetReminderTimeValueUI(which, value){
-        
         console.log(document.getElementById(which))
         if(document.getElementById((which + '-' + value.toString()).toString().replaceAll('.','-').replaceAll(' ', '-').replaceAll('--','-')))
             document.getElementById((which + '-' + value.toString()).toString().replaceAll('.','-').replaceAll(' ', '-').replaceAll('--','-')).setAttribute('selected','selected')
-       
         this.sortEditingReminderTimeValuesUI(which)
+    }
+    toggleEditingAccount(which){
+        this.setState({
+            editingAccountWhich: which
+        })
     }
     sortEditingReminderTimeValuesUI(which){
         var which_prefix = which.toString().substring(0, which.toString().indexOf('-'))
@@ -163,21 +232,60 @@ export default class UserProfile extends React.Component{
         fetch(url, options)
         .then((response) => response.json())
         .then((json) => {
-            console.log(json)
-            //...
+             console.log(json)
+            for(var i = 0; i < json.added_reminder_users.length; i++){
+                document.getElementById(json.added_reminder_users[i].reminder_type + '-' + i.toString()).setAttribute('value',json.added_reminder_users[i].time)
+            }
+            if(json.status == 200){
+                this.setState({editingReminderScheduleFor: ''})
+            }
         })
         .catch((e) => {
             console.log(e)
             //...
         })
     }
+    setUnconfirmedEmailStateValue(newValue){
+        this.setState({unconfirmedEmail: newValue})
+    }
+    setUnconfirmedPhoneStateValue(newValue){
+        this.setState({unconfirmedPhone: newValue})
+    }
     render(){
         return (
             <div>
                 <div className="info"></div>
-                {this.state.signedIn == "no" && this.state.createAccountToggle == "no" && <Login toggleCreate={this.toggleCreateAccount} setUser={this.setUser} toggleSignedIn={this.toggleSignedIn} />}
-                {this.state.signedIn == "no" && this.state.createAccountToggle == "yes" && <CreateAccount toggleCreate={this.toggleCreateAccount} setUser={this.setUser} toggleSignedIn={this.toggleSignedIn} />}
-                {this.state.signedIn == "yes" && <Account userId={this.state.userId} email={this.state.email} phone={this.state.phone} timezone={this.state.timezone} carrier={this.state.carrier} setUser={this.setUser} toggleEditReminderScheduleFor={this.toggleEditReminderScheduleFor} editingReminderScheduleFor={this.state.editingReminderScheduleFor} toggleSignedIn={this.toggleSignedIn} toggleSetReminderTimeValueUI={this.toggleSetReminderTimeValueUI} changeUserSubscriptionFor={this.changeUserSubscriptionFor} />}
+                {this.state.signedIn == "no" && this.state.createAccountToggle == "no" && this.state.forgotPasswordToggle == "no" && this.state.resetPasswordToggle == "no" && <Login toggleCreate={this.toggleCreateAccount} toggleForgotPassword={this.toggleForgotPassword} toggleResetPassword={this.toggleResetPassword} setUser={this.setUser} toggleSignedIn={this.toggleSignedIn} />}
+                {this.state.signedIn == "no" && this.state.createAccountToggle == "yes" && <CreateAccount toggleCreate={this.toggleCreateAccount} setUser={this.setUser} toggleSignedIn={this.toggleSignedIn} goBackToLogin={this.goBackToLogin} />}
+                {this.state.signedIn == "no" && this.state.forgotPasswordToggle == "yes" && <ForgotPassword toggleResetPassword={this.toggleResetPassword} toggleForgotPassword={this.toggleForgotPassword} goBackToLogin={this.goBackToLogin} />}
+                {this.state.signedIn == "no" && this.state.resetPasswordToggle == "yes" && <ResetPassword toggleResetPassword={this.toggleResetPassword} toggleForgotPassword={this.toggleForgotPassword} goBackToLogin={this.goBackToLogin} />}
+                {
+                    this.state.signedIn == "yes" && 
+                    <Account 
+                        userId={this.state.userId} 
+                        email={this.state.email} 
+                        phone={this.state.phone} 
+                        timezone={this.state.timezone} 
+                        carrier={this.state.carrier} 
+                        unconfirmedEmail={this.state.unconfirmedEmail}
+                        unconfirmedPhone={this.state.unconfirmedPhone}
+                        setUser={this.setUser} 
+                        toggleEditReminderScheduleFor={this.toggleEditReminderScheduleFor} 
+                        editingReminderScheduleFor={this.state.editingReminderScheduleFor} 
+                        oggleSignedIn={this.toggleSignedIn} 
+                        toggleSetReminderTimeValueUI={this.toggleSetReminderTimeValueUI} 
+                        changeUserSubscriptionFor={this.changeUserSubscriptionFor} 
+                        toggleEditingAccount={this.toggleEditingAccount} 
+                        editingAccountFor={this.state.editingAccountWhich} 
+                        accessToken={this.state.accessToken}
+                        confirmUnconfirmedEmail={this.confirmUnconfirmedEmail}
+                        setUnconfirmedEmailStateValue={this.setUnconfirmedEmailStateValue} 
+                        setUnconfirmedPhoneStateValue={this.setUnconfirmedPhoneStateValue}
+                        setTimezone={this.setTimezone}
+                        setCarrier={this.setCarrier}
+                    />
+                        
+                }
             </div>
     )}
 }

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_06_05_021450) do
+ActiveRecord::Schema.define(version: 2022_06_20_225838) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -68,6 +68,7 @@ ActiveRecord::Schema.define(version: 2022_06_05_021450) do
     t.datetime "reset_password_sent_at"
     t.string "carrier"
     t.string "timezone"
+    t.string "unconfirmed_phone"
   end
 
   add_foreign_key "reminder_users", "reminder_times"
