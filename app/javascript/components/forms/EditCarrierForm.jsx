@@ -1,10 +1,11 @@
 import React from 'react';
-
+import LoadingAnimation from '../LoadingAnimation';
 export default class EditCarrierForm extends React.Component{
     constructor(props){
         super(props)
         this.state={
-            newCarrierSelection: ''
+            newCarrierSelection: '',
+            requestUnderway: 'no'
         }
         this.editCarrierSubmit = this.editCarrierSubmit.bind(this)
         this.setNewCarrierSelection = this.setNewCarrierSelection.bind(this)
@@ -28,6 +29,7 @@ export default class EditCarrierForm extends React.Component{
         var verified = this.verifyForm(new_carrier)
         if(!verified)
             return
+        this.setState({requestUnderway: 'yes'})
         const headers = {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
@@ -47,7 +49,11 @@ export default class EditCarrierForm extends React.Component{
         .then((response) => response.json())
         .then((json) => {
             console.log(json)
+            this.setState({requestUnderway: 'no'})
             if(json.status == 200){
+                document.getElementById('carrier-span').classList.add('green-underline')
+                document.getElementById('edit-carrier-toggle-button-icon').classList.remove('fa-pencil')
+                document.getElementById('edit-carrier-toggle-button-icon').classList.add('fa-check')
                 this.props.setCarrier(new_carrier)
             }
         })
@@ -102,7 +108,16 @@ export default class EditCarrierForm extends React.Component{
                         </select>
                     </span>
                     <span className="login-form-span">
-                        <button className="form-control" id="edit-carrier-submit-button" onClick={this.editCarrierSubmit} >Submit</button>
+                        {
+                            this.state.requestUnderway == "no" &&
+                            <button className="form-control submit-button" id="edit-carrier-submit-button" onClick={this.editCarrierSubmit} >Change Carrier</button>
+                        }
+                        {
+                            this.state.requestUnderway == "yes" &&
+                            <div className="change-email-loading-animation-container">
+                                <LoadingAnimation />
+                            </div>
+                        }
                     </span>
                 </div>
             </div>

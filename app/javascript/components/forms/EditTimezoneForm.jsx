@@ -1,10 +1,11 @@
 import React from 'react';
-
+import LoadingAnimation from '../LoadingAnimation'
 export default class EditTimezoneForm extends React.Component{
     constructor(props){
         super(props)
         this.state={
-            newTimezoneSelection: ''
+            newTimezoneSelection: '',
+            requestUnderway: 'no'
         }
         this.setNewTimezoneSelection = this.setNewTimezoneSelection.bind(this)
         this.editTimezoneSubmit = this.editTimezoneSubmit.bind(this)
@@ -24,6 +25,7 @@ export default class EditTimezoneForm extends React.Component{
         var verified = this.verifyForm(new_timezone)
         if(!verified)
             return
+        this.setState({requestUnderway: 'yes'})
         const headers = {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
@@ -43,7 +45,11 @@ export default class EditTimezoneForm extends React.Component{
         .then((response) => response.json())
         .then((json) => {
             console.log(json)
+            this.setState({requestUnderway: 'no'})
             if(json.status == 200){
+                document.getElementById('timezone-span').classList.add('green-underline')
+                document.getElementById('edit-timezone-toggle-button-icon').classList.remove('fa-pencil')
+                document.getElementById('edit-timezone-toggle-button-icon').classList.add('fa-check')
                 this.props.setTimezone(new_timezone)
             }
         })
@@ -78,7 +84,16 @@ export default class EditTimezoneForm extends React.Component{
                         </select>
                     </span>
                     <span className="login-form-span">
-                        <button className="form-control" id="edit-timezone-submit-button" onClick={this.editTimezoneSubmit} >Submit</button>
+                        {
+                            this.state.requestUnderway == "no" &&
+                            <button className="form-control submit-button" id="edit-timezone-submit-button" onClick={this.editTimezoneSubmit} >Change Timezone</button>
+                        }   
+                        {
+                            this.state.requestUnderway == "yes" &&
+                            <div className="change-email-loading-animation-container">
+                                <LoadingAnimation />
+                            </div>
+                        }
                     </span>
                 </div>
             </div>

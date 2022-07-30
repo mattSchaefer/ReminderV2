@@ -18,7 +18,17 @@ export default class UserProfile extends React.Component{
             editingReminderScheduleFor: '',
             accessToken: '',
             unconfirmedEmail: '',
-            unconfirmedPhone: ''
+            unconfirmedPhone: '',
+            activated: false,
+            loginCaptchaToken: '',
+            createAccountCaptchaToken: '',
+            setUnconfirmedEmailCaptchaToken: '',
+            confirmUnconfirmedEmailCaptchaToken: '',
+            setUnconfirmedPhoneCaptchaToken: '',
+            confirmUnconfirmedPhoneCaptchaToken: '',
+            changePasswordCaptchaToken: '',
+            forgotPasswordCaptchaToken: '',
+            resetPasswordCaptchaToken: ''
         }
         this.toggleCreateAccount = this.toggleCreateAccount.bind(this)
         this.toggleForgotPassword = this.toggleForgotPassword.bind(this)
@@ -38,6 +48,16 @@ export default class UserProfile extends React.Component{
         this.setCarrier = this.setCarrier.bind(this)
         this.setTimezone = this.setTimezone.bind(this)
         this.setUnconfirmedPhoneStateValue = this.setUnconfirmedPhoneStateValue.bind(this)
+        this.setActivated = this.setActivated.bind(this)
+        this.handleLoginCaptchaChange = this.handleLoginCaptchaChange.bind(this)
+        this.handleCreateAccountCaptchaChange = this.handleCreateAccountCaptchaChange.bind(this)
+        this.handleSetUnconfirmedEmailCaptchaChange = this.handleSetUnconfirmedEmailCaptchaChange.bind(this)
+        this.handleConfirmUnconfirmedEmailCaptchaChange = this.handleConfirmUnconfirmedEmailCaptchaChange.bind(this)
+        this.handleSetUnconfirmedPhoneCaptchaChange = this.handleSetUnconfirmedPhoneCaptchaChange.bind(this)
+        this.handleConfirmUnconfirmedPhoneCaptchaChange = this.handleConfirmUnconfirmedPhoneCaptchaChange.bind(this)
+        this.handleChangePasswordCaptchaChange = this.handleChangePasswordCaptchaChange.bind(this)
+        this.handleForgotPasswordCaptchaChange = this.handleForgotPasswordCaptchaChange.bind(this)
+        this.handleResetPasswordCaptchaChange = this.handleResetPasswordCaptchaChange.bind(this)
     }
     componentDidMount(){
 
@@ -89,11 +109,17 @@ export default class UserProfile extends React.Component{
             editingReminderScheduleFor: '',
             accessToken: '',
             unconfirmedEmail: '',
-            unconfirmedPhone: ''
+            unconfirmedPhone: '',
+            activated: ''
         })
+        setTimeout(() => {
+            document.getElementById('login-form-container').classList.remove('faded')
+            this.props.setHomepagePhone("")
+        },750)
+        
     }
     toggleSignedIn(){}
-    setUser(id, phone, email, timezone, carrier, token, unconfirmedEmail, unconfirmedPhone){
+    setUser(id, phone, email, timezone, carrier, token, unconfirmedEmail, unconfirmedPhone, activated){
         this.setState({
             userId: id,
             email: email,
@@ -104,8 +130,13 @@ export default class UserProfile extends React.Component{
             editingAccountWhich: "",
             accessToken: token,
             unconfirmedEmail: unconfirmedEmail,
-            unconfirmedPhone: unconfirmedPhone
+            unconfirmedPhone: unconfirmedPhone,
+            activated: activated
         })
+        this.props.setHomepagePhone(phone)
+    }
+    setActivated(value){
+        this.setState({activated: value})
     }
     toggleEditReminderScheduleFor(reminder_type){
         this.setState({editingReminderScheduleFor: reminder_type})
@@ -214,10 +245,13 @@ export default class UserProfile extends React.Component{
        
         const url = "/change_user_subscriptions"
         const csrf = document.querySelector('meta[name="csrf-token"]').content
+        var bearer = this.state.accessToken.toString()
+
         const headers = {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
-            'X-CSRF-Token': csrf
+            'X-CSRF-Token': csrf, 
+            'Authorization': "bearer " + bearer
         }
         const body = JSON.stringify({
             user_id: this.state.userId,
@@ -238,6 +272,14 @@ export default class UserProfile extends React.Component{
             }
             if(json.status == 200){
                 this.setState({editingReminderScheduleFor: ''})
+                setTimeout(() => {
+                    document.getElementById(which + '-toggle-edit-button-icon').classList.remove('fa-pencil')
+                    document.getElementById(which + '-toggle-edit-button-icon').classList.add('fa-check')
+                    document.getElementById(which + '-toggle-edit-button-icon').style.border = "none !important"
+                    document.getElementById(which + '-toggle-edit-button-icon').style.scale = 1
+                    document.getElementById(which + '-edit-form-header').style.color = "green"
+                    document.getElementById(which + '-toggle-edit-button-outer').classList.remove('circle')
+                },200)
             }
         })
         .catch((e) => {
@@ -251,14 +293,41 @@ export default class UserProfile extends React.Component{
     setUnconfirmedPhoneStateValue(newValue){
         this.setState({unconfirmedPhone: newValue})
     }
+    handleLoginCaptchaChange(token){
+        this.setState({loginCaptchaToken: token})
+    }
+    handleCreateAccountCaptchaChange(token){
+        this.setState({createAccountCaptchaToken: token})
+    }
+    handleSetUnconfirmedEmailCaptchaChange(token){
+        this.setState({setUnconfirmedEmailCaptchaToken: token})
+    }
+    handleSetUnconfirmedPhoneCaptchaChange(token){
+        this.setState({setUnconfirmedPhoneCaptchaToken: token})
+    }
+    handleConfirmUnconfirmedEmailCaptchaChange(token){
+        this.setState({confirmUnconfirmedEmailCaptchaToken: token})
+    }
+    handleConfirmUnconfirmedPhoneCaptchaChange(token){
+        this.setState({confirmUnconfirmedPhoneCaptchaToken: token})
+    }
+    handleChangePasswordCaptchaChange(token){
+        this.setState({changePasswordCaptchaToken: token})
+    }
+    handleForgotPasswordCaptchaChange(token){
+        this.setState({forgotPasswordCaptchaToken: token})
+    }
+    handleResetPasswordCaptchaChange(token){
+        this.setState({resetPasswordCaptchaToken: token})
+    }
     render(){
         return (
-            <div>
+            <div className="user-profile-container">
                 <div className="info"></div>
-                {this.state.signedIn == "no" && this.state.createAccountToggle == "no" && this.state.forgotPasswordToggle == "no" && this.state.resetPasswordToggle == "no" && <Login toggleCreate={this.toggleCreateAccount} toggleForgotPassword={this.toggleForgotPassword} toggleResetPassword={this.toggleResetPassword} setUser={this.setUser} toggleSignedIn={this.toggleSignedIn} />}
-                {this.state.signedIn == "no" && this.state.createAccountToggle == "yes" && <CreateAccount toggleCreate={this.toggleCreateAccount} setUser={this.setUser} toggleSignedIn={this.toggleSignedIn} goBackToLogin={this.goBackToLogin} />}
-                {this.state.signedIn == "no" && this.state.forgotPasswordToggle == "yes" && <ForgotPassword toggleResetPassword={this.toggleResetPassword} toggleForgotPassword={this.toggleForgotPassword} goBackToLogin={this.goBackToLogin} />}
-                {this.state.signedIn == "no" && this.state.resetPasswordToggle == "yes" && <ResetPassword toggleResetPassword={this.toggleResetPassword} toggleForgotPassword={this.toggleForgotPassword} goBackToLogin={this.goBackToLogin} />}
+                {this.state.signedIn == "no" && this.state.createAccountToggle == "no" && this.state.forgotPasswordToggle == "no" && this.state.resetPasswordToggle == "no" && <Login toggleCreate={this.toggleCreateAccount} toggleForgotPassword={this.toggleForgotPassword} toggleResetPassword={this.toggleResetPassword} setUser={this.setUser} toggleSignedIn={this.toggleSignedIn} handleLoginCaptchaChange={this.handleLoginCaptchaChange} loginCaptchaToken={this.state.loginCaptchaToken} />}
+                {this.state.signedIn == "no" && this.state.createAccountToggle == "yes" && <CreateAccount toggleCreate={this.toggleCreateAccount} setUser={this.setUser} toggleSignedIn={this.toggleSignedIn} goBackToLogin={this.goBackToLogin} createAccountCaptchaToken={this.state.createAccountCaptchaToken} handleCreateAccountCaptchaChange={this.handleCreateAccountCaptchaChange} />}
+                {this.state.signedIn == "no" && this.state.forgotPasswordToggle == "yes" && <ForgotPassword toggleResetPassword={this.toggleResetPassword} toggleForgotPassword={this.toggleForgotPassword} goBackToLogin={this.goBackToLogin} handleForgotPasswordCaptchaChange={this.handleForgotPasswordCaptchaChange} forgotPasswordCaptchaToken={this.state.forgotPasswordCaptchaToken} />}
+                {this.state.signedIn == "no" && this.state.resetPasswordToggle == "yes" && <ResetPassword toggleResetPassword={this.toggleResetPassword} toggleForgotPassword={this.toggleForgotPassword} goBackToLogin={this.goBackToLogin} handleResetPasswordCaptchaChange={this.handleResetPasswordCaptchaChange} resetPasswordCaptchaToken={this.state.resetPasswordCaptchaToken} />}
                 {
                     this.state.signedIn == "yes" && 
                     <Account 
@@ -269,6 +338,7 @@ export default class UserProfile extends React.Component{
                         carrier={this.state.carrier} 
                         unconfirmedEmail={this.state.unconfirmedEmail}
                         unconfirmedPhone={this.state.unconfirmedPhone}
+                        activated={this.state.activated}
                         setUser={this.setUser} 
                         toggleEditReminderScheduleFor={this.toggleEditReminderScheduleFor} 
                         editingReminderScheduleFor={this.state.editingReminderScheduleFor} 
@@ -283,6 +353,19 @@ export default class UserProfile extends React.Component{
                         setUnconfirmedPhoneStateValue={this.setUnconfirmedPhoneStateValue}
                         setTimezone={this.setTimezone}
                         setCarrier={this.setCarrier}
+                        goBackToLogin={this.goBackToLogin}
+                        setActivated={this.setActivated}
+                        handleSetUnconfirmedEmailCaptchaChange={this.handleSetUnconfirmedEmailCaptchaChange}
+                        setUnconfirmedEmailCaptchaToken={this.state.setUnconfirmedEmailCaptchaToken}
+                        handleConfirmUnconfirmedEmailCaptchaChange={this.handleConfirmUnconfirmedEmailCaptchaChange}
+                        confirmUnconfirmedEmailCaptchaToken={this.state.confirmUnconfirmedEmailCaptchaToken}
+                        handleSetUnconfirmedPhoneCaptchaChange={this.handleSetUnconfirmedPhoneCaptchaChange}
+                        setUnconfirmedPhoneCaptchaToken={this.state.setUnconfirmedPhoneCaptchaToken}
+                        confirmUnconfirmedPhoneCaptchaToken={this.state.confirmUnconfirmedPhoneCaptchaToken}
+                        handleConfirmUnconfirmedPhoneCaptchaChange={this.handleConfirmUnconfirmedPhoneCaptchaChange}
+                        handleChangePasswordCaptchaChange={this.handleChangePasswordCaptchaChange}
+                        changePasswordCaptchaToken={this.state.changePasswordCaptchaToken}
+                        setHomepagePhone={this.props.setHomepagePhone}
                     />
                         
                 }

@@ -22,8 +22,15 @@
     line-height: 1.2;
 }
 body{
-    padding-left: 0;
-    margin-left: 0;
+    padding-left: 0 !important;
+    margin-left: 0 !important;
+    margin-bottom: 0 !important;
+    background: #9d9a91;
+    padding-right: 0 !important;
+    margin-right: 0 !important;
+    width: 100vw;
+    
+    overflow-x: hidden;
 }
 video{
     width: 100vw;
@@ -38,12 +45,28 @@ video{
 label{
     font-weight: 600;
 }
+input{
+    margin-bottom: 1rem;
+}
+textarea{
+    margin-bottom: 1rem;
+}
+.footer-link-ele:hover,.footer-link-ele:focus{
+    background-color: #666;
+    color: #eee;
+}
+.footer-link-ele{
+    border-radius: 3px;
+    padding: 4px;
+    color: #666
+}
 .remember-now-header{
     font-weight: 600;
     font-style: italic;
     font-size: 5rem;
     margin-bottom: 0;
     z-index: 30000;
+    text-shadow: 2px 3px #9d9a91;
 }
 .header-and-para{
     position: absolute;
@@ -56,11 +79,12 @@ label{
 .reminder-para{
     font-weight: 600;
     font-size: 1.5rem;
+    text-shadow: 1px 2px #9d9a91;
 }
 .black-background{
-    background: black;
+    /* background: #40d2b0; */
     /* margin-top: 26vh; */
-    margin-left: -15px;
+    background: #9d9a91;
 }
 .blue-background{
     background: #009fff
@@ -101,7 +125,7 @@ label{
     margin-right: 5px;
 }
 .fa{
-    margin-left: 5px;
+    /* margin-left: 5px; */
 }
 .about-section-h2{
     font-size: 4rem;
@@ -112,7 +136,7 @@ label{
     width: 33vw;
 }
 .about-section-bottom{
-    width: 100%;
+    width: 97%;
     display: flex;
     flex-direction: row;
     justify-content: flex-end;
@@ -152,6 +176,20 @@ label{
     justify-content: space-between;
     align-items: center;
 }
+.footer-container{
+    background: #eee;
+    min-height: 50vh;
+    height: 50vh;
+}
+.homepage-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.router-container{
+    display: flex;
+}
 .desk-photo{
     width: 40vw;
     height: 20vh;
@@ -163,20 +201,28 @@ label{
 .bottom-text{
     font-weight: 600;
     font-size: 1.5rem;
-    margin-right: 10vw;
-    color: darkorange;
+    text-align: end;
+    color: #3474aced;
+    transform: translateX(100vw) skew(-10deg);
+    transition: .2s;
+}
+.did-you-know{
+    font-size: 2rem;
+    margin: 0;
+    margin-top: 5rem;
 }
 section{
     min-height: 98vh; 
-    width: 103vw;
+    width: 100vw;
     overflow-x: hidden;
+    overflow-y: hidden;
 }
-.white-text{color: white;}
+.white-text{color: black;}
 .login-signup-header-button{
     width: 12rem;
     height: 3rem;
-    background: black;
-    border: 2px solid #009fff;
+    background: #3474aced;;
+    border: 2px solid black;
     color: white;
     font-weight: 600;
     font-size: 1rem;
@@ -184,16 +230,19 @@ section{
     transition: .3s;
     transform: skew(-12deg)
 }
-#change-email-button{
-    background: black;
-    border: 2px solid #009fff;
+.activate-account-button{
+    height: 2.5rem !important;
+}
+/* #change-email-button{
+    background: #032057;;
+    border: 2px solid black;
     color: white;
     border-radius: 3px;
     height: 35px;
     font-weight: 600;
     padding: 7px;
     cursor: pointer;
-}
+} */
 .change-password-container{
     align-self: flex-start;
 }
@@ -204,13 +253,23 @@ section{
 #delete-account-button:hover{
     text-decoration: underline;
 }
-.login-signup-header-button:hover, .login-signup-header-button:focus, .login-button:hover, .login-button:focus, .create-account-button:hover, .create-account-button:focus, .activate-account-button:hover, .activate-account-button:focus{
-    background: #009fff;
+.login-button:hover, .login-button:focus, .create-account-button:hover, .create-account-button:focus, .activate-account-button:hover, .activate-account-button:focus, .submit-button:hover, .submit-button:focus, .change-schedule-button:hover, .change-schedule-button:focus{
+    background: black;
     /* color: black; */
-    border: 2px solid black;
+    border: 2px solid #032057;
     transition: .3s;
     /* padding-bottom: 10px; */
-    padding-right: 20px;
+    padding-bottom: 10px;
+    font-weight: bold;
+    text-decoration: underline;
+}
+.login-signup-header-button:hover, .login-signup-header-button:focus{
+    background: black;
+    /* color: black; */
+    border: 2px solid #032057;
+    transition: .3s;
+    /* padding-bottom: 10px; */
+    padding-left: -10px;
     font-weight: bold;
     text-decoration: underline;
 }
@@ -233,6 +292,11 @@ section{
     font-size: .75rem;
     font-weight: 700;
 }
+.code-success{
+    box-shadow: 0px 1px 4px 3px lightgreen;
+    background: lightgreen;
+    border: 0;
+}
 .header-flex{
     display: flex;
     flex-direction: row;
@@ -242,41 +306,82 @@ section{
 .skewed-strip{
     width: 1rem;
     height: 2.75rem;
-    background: black;
-    border: 2px solid #009fff;
+    background: #3474aced;
+    border: 2px solid black;
     transform: skew(-12deg);
     margin-right: .25rem;
+    transition: .2s;
+}
+.scrolldown-header{
+    font-weight: 800;
+    position: absolute;
+    bottom: -2rem;
+    cursor: pointer;
+    text-decoration: underline;
+}
+.scrolldown-header:hover,.scrolldown-header:focus{
+    font-weight: 900;
+    transform: translateY(-2px);
+}
+.retract-spring{
+    width: 5px !important;
+    margin-right: 2px !important;
+    border: 2px solid #032057 !important;
+}
+.signup-link, .go-back-button{
+    font-weight: bold;
+    border: transparent;
+    background: transparent;
+    cursor: pointer;
+}
+.go-back-button{
+    align-self: flex-start;
+}
+.signup-link:hover, .signup-link:focus{
+    text-decoration: underline;
+    transform: translateY(-3px);
 }
 .login-container, .create-account-container, .activate-account-container, .account-container, .forgot-container, .reset-password-container{
     display: flex;
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    width: 100vw;
+    width: 100%;
     min-height: 100vh;
+    margin-bottom: 10vh;
 }
 .login-form-container, .create-account-form-container, .activate-account-form-container, .forgot-form-container, .reset-password-form-container{
     width: 33%;
-    border-radius: 3px;
+    border-bottom-right-radius: 3px;
+    border-bottom-left-radius: 3px;
+    border-top-right-radius: 20px;
+    border-top-left-radius: 20px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     padding: 15px;
-    border: 2px solid #009fff;
-    background: white;
+    border: 2px solid #eee;
+    background: #eee;
+    box-shadow: 0px -1px 20px 0px rgba(125, 124, 124, 0.75);
 }
 .account-inner-container{
-    width: 33%;
-    border-radius: 3px;
+    width: 75%;
+    border-bottom-right-radius: 3px;
+    border-bottom-left-radius: 3px;
+    border-top-right-radius: 20px;
+    border-top-left-radius: 20px;
     display: flex;
     flex-direction: column;
     justify-content: space-around;
     align-items: flex-start;
     padding: 15px;
-    border: 2px solid #009fff;
-    background: white;
+    border: 2px solid #eee;
+    background: #eee;
     min-height: 30rem;
+    margin-top: 5rem;    
+    box-shadow: 0px -1px 20px 0px rgba(125, 124, 124, 0.75);
+
 }
 .subscriptions-container, .account-info-container{
     height: 100%;
@@ -298,7 +403,7 @@ section{
     color: white !important;
     transition: .3s;
 }
-.login-button, .create-account-button, .activate-account-button{
+.login-button, .create-account-button, .activate-account-button, .submit-button{
     background: darkorange;
     height: 2.2rem;
     margin-top: 10px;
@@ -308,8 +413,8 @@ section{
     width: 12rem;
     height: 3rem;
     border-radius: 4px;
-    background: #009fff;
-    border: 2px solid #009fff;
+    background: #3474aced;
+    border: 2px solid #3474aced;
     color: white;
     font-weight: 600;
     font-size: 1rem;
@@ -327,6 +432,12 @@ section{
 }
 .edit-reminder-schedule-button{
     cursor: pointer;
+    background: transparent;
+    border: transparent;
+    margin-bottom: 1rem;
+}
+.edit-reminder-schedule-select{
+    margin-bottom: 1rem;
 }
 .edit-reminder-schedule-form-container{
     margin-top: 1rem;
@@ -343,6 +454,7 @@ section{
 }
 .reminder-ele{
     margin-bottom: 10px;
+    min-height: 5rem;
 }
 .account-info-header{
     display: flex;
@@ -351,8 +463,20 @@ section{
     align-items: center;
     width: 100%;
 }
-.toggle-show-account-button{
+.toggle-show-account-button, .logout-button{
     cursor: pointer;
+    background: transparent;
+    border: transparent;
+}
+.toggle-show-account-button{
+    margin-right: 10px;
+}
+.header-logout-span{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
 }
 .subscription-header{
     margin-bottom: 0;
@@ -363,6 +487,8 @@ section{
     margin-top: .5rem;
     margin-left: 1rem;
     padding-right: 2rem;
+    color: #032057;
+    opacity: .7;
 }
 .flex-col{display: flex;flex-direction: column;}
 label{
@@ -377,7 +503,12 @@ label{
 .field-error{
     /* -webkit-box-shadow: 0px 0px 2px 2px rgba(251, 123, 123, 0.81); 
     box-shadow: 0px 0px 2px 2px rgba(251, 123, 123, 0.81); */
-    border: 2px solid rgba(255, 49, 49, 0.81);
+    border: 2px solid rgba(240, 53, 53, 0.81);
+    box-shadow: 0px 0px 3px 0px rgba(240, 53, 53, 0.81);
+    animation-name: shake; 
+    animation-duration: .5s; 
+    animation-iteration-count: 1;
+    animation-timing-function: linear;
 }
 #carrier-select, #timezone-select{
     background: white !important;
@@ -386,12 +517,25 @@ label{
 }
 #scroll-down{
     font-style: italic;
+    padding-left: 15px;
 }
 .circle{
     border: 1px solid darkgray;
+    background: white;
     border-radius: 12px;
     padding: 5px;
     margin-left: 10px;
+    box-shadow: 0px 1px 1px 0px darkgray;
+}
+.account-activation-resend-code{
+    margin-top: 1rem;
+    cursor: pointer;
+}
+.activate-account-account-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: flex-start;
 }
 .confirm-unconfirmed-email-container, .confirm-unconfirmed-phone-container{
     display: flex;
@@ -402,19 +546,22 @@ label{
     min-height: 15rem;
     margin-left: 1rem;
 }
-.change-schedule-button{
+ .change-schedule-button{
     width: 8rem;
-    /* height: 2rem;
-    background: black;
-    border: 2px solid #009fff;
-    color: white; */
+   
     cursor: pointer;
     transition: .3s;
-    /* transform: skew(-12deg); */
-    margin-top: 1rem;
-    background: white;
-    border-color: black;
+    margin-bottom: 1rem;
+    border-radius: 4px;
+    background: #3474aced;
+    border: 2px solid #3474aced;
+    color: white;
     font-weight: 700;
+} 
+.change-email-loading-animation-container{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
 }
 select, option button{cursor: pointer;}
 hr{
@@ -433,8 +580,14 @@ hr{
 }
 .full-width{width: 100%;}
 .good-to-go{align-self: center;}
-.forgot-password-button{
-   
+.forgot-password-button, .reset-password-button, .transparent-bg{
+   background: transparent;
+   border: transparent;
+}
+.forgot-password-button:hover, .reset-password-button:hover,.forgot-password-button:focus, .reset-password-button:focus{
+    font-weight: 600;
+    text-decoration: underline;
+    cursor: pointer;
 }
 .forgot-reset-password-container{
     display: flex;
@@ -450,14 +603,229 @@ hr{
 .forgot-password-paragraph{
     width: 80%;
 }
-.forgot-password-submit-button-span, .reset-password-submit-button-span{
+.reset-password-submit-button-span{
     width: 12rem;
     margin-top: 1rem;
 }
-@media only screen and (max-width: 600px) {
-    video{scale: 5;}
+.forgot-password-submit-button-span{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.footer-section{
+    min-height: 50vh !important;
+    height: 50vh !important;
+}
+.footer-container{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+}
+.footer-element{
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 20%;
+}
+.footer-element-inner{
+    height: 100%;
+    min-width: 20vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+
+}
+.tooltip-bottom{
+    height: 1rem;
+    width: 1rem;
+    background: #333;
+    height: 1rem;
+    width: 1rem;
+    background: #333;
+    transform: rotateZ(45deg);
+    margin-top: -10px;
+    z-index: -1;
+    border-radius: 3px;
+}
+.tooltip-body{
+    background: #333;
+    padding: 5px;
+    color: #eee;
+    border-radius: 3px;
+}
+.tooltip-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    bottom: 12rem;
+}
+
+.to-the-left{
+    transform: translateX(-100vw);
+    transition: .2s linear;
+}
+.to-the-right{
+    transform: translateX(100vw);
+    transition: .2s linear;
+}
+.where-it-should-be{
+    transform: translateX(0vw);
+    transition: .1s;
+    transition-timing-function:ease-in-out
+}
+.where-it-should-be-skewed{
+    transform: translateX(0vw) skew(-10deg);
+    transition: .1s;
+    transition-timing-function:ease-in-out
+}
+.full-opacity{
+    opacity: 1 !important;
+    transition: .4s ease-in;
+}
+.user-profile-container{
+    display: flex;
+    flex-direction: row;
+}
+.contact-form{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+}
+.faded{opacity: 0;}
+.loading-animation-container{
+    width: 8rem;
+    height: 100%;
+    border-radius: 50%;
+    border: 10px solid #032057;
+    border-bottom-color: transparent;
+    border-left-color: transparent;
+    transition: .2s ease-in;
+    animation-name: rotate; 
+    animation-duration: 1.0s; 
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+    scale: .25;
+}
+.loading-animation-container-outer{
+    height: 8rem;
+    width: 2rem;
+    margin-top: -2rem;
+    margin-bottom: -2rem;
+    margin-left: -8rem;
+}
+.set-unconfirmed-phone-loading-animation-outer{
+    height: 8rem;
+    width: 2rem;
+    margin-top: -2rem;
+    margin-bottom: 1rem;
+    margin-left: 0 !important;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: flex-end;
+}
+.show-password-span{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+.green-underline{
+    border-bottom: 2px solid green !important;
+    color: green;
+}
+.yellow-underline{
+    border-bottom: 2px solid gold;
+    
+}
+.signup-container{
+    margin-top: -1rem;
+    margin-bottom: 2rem;
+}
+.fa-check{
+    color: green;
+    border: 2px solid green;
+    padding: 2px;
+    border-radius: 50%;
+    scale: .66;
+}
+.donate-footer-icon, .fa-linkedin, .fa-clipboard{
+    font-size: 5rem;
+    cursor: pointer;
+}
+.fa-coffee{
+    cursor: pointer;
+}
+.footer-element-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.schedule-element{
+    width: 5rem;
+    padding-left: 10px;
+    margin-bottom: 1rem;
+    box-shadow: 0px 1px 1px 0px darkgray;
+}
+.edit-reminder-schedule-form-container{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    flex-wrap: wrap;
+}
+.login-header{
+    font-size: 2rem;
+}
+.login-header-span{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+@keyframes rotate{
+    0%{
+        transform: rotate(0deg)
+    }
+    100%{
+        transform: rotate(360deg)
+    }
+}
+@keyframes shake{
+    0%{
+        transform: translateX(-3px)
+    }
+    20%{
+        transform: translateX(3px)
+    }
+    40%{
+        transform: translateX(-3px)
+    }
+    60%{
+        transform: translateX(3px)
+    }
+    80%{
+        transform: translateX(-3px)
+    }
+    100%{
+        transform: translateX(0)
+    }
+}
+@media only screen and (max-width: 1200px) {
+    video{scale: 1; width: auto;}
     .remember-now-header{font-size: 2rem;z-index: 30000;}
-    .header-and-para{top: 10vh;z-index: 30000;}
+    .header-and-para{z-index: 30000;}
     .about-section-container{margin-left: 0;}
     .about-section-h2{font-size: 2rem; margin-left: 1rem; margin-top: 11vh;}
     .about-section-element-2{flex-direction: column; align-items: center;}
@@ -467,5 +835,31 @@ hr{
     li{font-size: 1.5rem;}
     .about-list{flex-direction: column;}
     .desk-photo{width: 105vw; margin-left: 45vw;}
-    .bottom-text{font-size: 1rem; margin-left: 1rem; margin-top: 5rem;}
+    .bottom-text{font-size: 1rem; margin-left: 1rem;}
+    .login-form-container, .create-account-form-container, .forgot-form-container, .reset-password-form-container{
+        width: 75%;
+    }
+    .footer-element{
+        width: 98%;
+    }
+    .footer-element-inner{
+        width: 100%;
+    }
+    .footer-header{
+        margin-left: 2rem;
+        align-self: flex-start;
+    }
+    .contact-form{
+        margin-left: 2rem;
+        margin-bottom: 2rem;
+    }
+    .footer-container{flex-direction: column; height: auto !important;}
+    .footer-section{height: auto !important;}
+    .schedule-container-inner{
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        width: 100%;
+        flex-wrap: wrap;
+    }
   }

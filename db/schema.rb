@@ -10,10 +10,17 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_06_20_225838) do
+ActiveRecord::Schema.define(version: 2022_07_06_234038) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "contacts", force: :cascade do |t|
+    t.string "email"
+    t.string "message"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
 
   create_table "reminder_times", force: :cascade do |t|
     t.time "time"
@@ -25,10 +32,10 @@ ActiveRecord::Schema.define(version: 2022_06_20_225838) do
   create_table "reminder_user_notification_stagers", force: :cascade do |t|
     t.bigint "reminder_user_id"
     t.date "date"
-    t.time "time"
     t.boolean "notification_sent"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.datetime "time"
     t.index ["reminder_user_id"], name: "index_reminder_user_notification_stagers_on_reminder_user_id"
   end
 

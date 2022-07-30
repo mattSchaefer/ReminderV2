@@ -1,4 +1,6 @@
 import React from 'react'
+import LoadingAnimation from '../components/LoadingAnimation'
+import ReCaptchaV2 from 'react-google-recaptcha'
 require('isomorphic-fetch')
 export default class CreateAccount extends React.Component{
     constructor(props){
@@ -9,7 +11,9 @@ export default class CreateAccount extends React.Component{
             accountActivationSubmissionComplete: 'no',
             accountActivationSubmissionResponse: {},
             accountActivated: 'no',
-            accountCreationErrorText: ''
+            accountCreationErrorText: '',
+            requestUnderway: 'no',
+            passwordFieldType: 'password'
         }
         this.createAccount = this.createAccount.bind(this)
         this.activateAccount = this.activateAccount.bind(this)
@@ -17,6 +21,7 @@ export default class CreateAccount extends React.Component{
         this.loginSignupMouseLeave = this.loginSignupMouseLeave.bind(this)
         this.validateAccountCreation = this.validateAccountCreation.bind(this)
         this.validatePasswordMatch = this.validatePasswordMatch.bind(this)
+        this.showPasswordCheckboxChange = this.showPasswordCheckboxChange.bind(this)
     }
     componentDidMount(){
 
@@ -27,10 +32,12 @@ export default class CreateAccount extends React.Component{
     createAccount(){
         var url = '/users'
         const csrf = document.querySelector('meta[name="csrf-token"]').content
+        var captcha_token = this.props.createAccountCaptchaToken
         var headers = {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
-            'X-CSRF-Token': csrf
+            'X-CSRF-Token': csrf,
+            'Captcha-Token': captcha_token
         }
         var email = document.getElementById('create-account-email').value || ''
         var phone = document.getElementById('create-account-phone').value.toString() || ''
@@ -42,6 +49,7 @@ export default class CreateAccount extends React.Component{
         var valid = this.validateAccountCreation(email, phone, password, password_confirm, carrier, timezone)
         if(!valid)
             return;
+        this.setState({requestUnderway: 'yes'})
         var body = JSON.stringify({
             email: email,
             phone: phone,
@@ -58,6 +66,7 @@ export default class CreateAccount extends React.Component{
         .then((response) => response.json())
         .then((json) => {
             console.log(json)
+            this.setState({requestUnderway: 'no'})
             if(json.status == 200){
                 this.setState({
                     accountCreationSubmissionResponse: json,
@@ -74,6 +83,7 @@ export default class CreateAccount extends React.Component{
         })
         .catch(e => {
             console.log(e)
+            this.setState({requestUnderway: 'no'})
             this.setState({accountCreationSubmissionResponse: e})
         })
     }
@@ -136,20 +146,22 @@ export default class CreateAccount extends React.Component{
             headers: headers,
             body: body
         }
+        this.setState({requestUnderway: 'yes'})
         fetch(url,options)
         .then(response => response.json())
         .then((json) => {
             console.log(json)
+            this.setState({requestUnderway: 'no'})
             if(json.status == 200){
                 this.setState({
                     accountActivationSubmissionComplete: 'yes',
                     accountActivationSubmissionResponse: json,
                 })
-                this.props.setUser(json.id, json.phone, json.email)
+                this.props.setUser(json.id, json.phone, json.email, json.timezone, json.carrier, json.token.token, json.unconfirmed_email, json.unconfirmed_phone, json.activated)
             }
         })
         .catch((e)=>{
-
+            this.setState({requestUnderway: 'no'})
         })
     }
     loginSignupMouseEnter(){
@@ -163,6 +175,13 @@ export default class CreateAccount extends React.Component{
     }
     stripPhoneNumber(number){
         return number.replace(/\D/g,'');
+    }
+    showPasswordCheckboxChange(){
+        if(document.getElementById('show-password-checkbox').checked){
+            this.setState({passwordFieldType: 'text'})
+        }else{
+            this.setState({passwordFieldType: 'password'})
+        }
     }
     render(){
         return(
@@ -216,7 +235,7 @@ export default class CreateAccount extends React.Component{
                                 <option value="central-standard">Central Standard</option>
                                 <option value="mountain-standard">Mountain Standard</option>
                                 <option value="pacific-standard">Pacific Standard</option>
-                                <option value="alaska-daylight">Alaska Daylight</option>
+                                <option value="alaska-standard">Alaska Daylight</option>
                                 <option value="hawaii">Hawaiii Standard</option>
                             </select>
                         </span>
@@ -226,13 +245,26 @@ export default class CreateAccount extends React.Component{
                         </span>
                         <span className="create-account-form-span">
                             <label>Password:</label>
-                            <input className="form-control"  id="create-account-password" onChange={this.validatePasswordMatch}></input>
+                            <input className="form-control"  id="create-account-password" onChange={this.validatePasswordMatch} type={this.state.passwordFieldType}></input>
                         </span>
                         <span className="create-account-form-span">
                             <label>Password Confirm:</label>
-                            <input className="form-control"  id="create-account-password-confirm" onChange={this.validatePasswordMatch}></input>
+                            <input className="form-control"  id="create-account-password-confirm" onChange={this.validatePasswordMatch} type={this.state.passwordFieldType}></input>
                         </span>
-                        <button className="create-account-button" id="create-account-button" onClick={this.createAccount} onMouseEnter={this.loginSignupMouseEnter} onMouseLeave={this.loginSignupMouseLeave} onFocus={this.loginSignupMouseEnter} onBlur={this.loginSignupMouseLeave} >Create Account</button>
+                        <span className="show-password-span">
+                            <label>Show Passwords:</label>
+                            <input className="form-control" type="checkbox" id="show-password-checkbox" onChange={this.showPasswordCheckboxChange}></input>
+                        </span>
+                        <ReCaptchaV2 id="createAccountSignupCaptcha" sitekey={process.env.REACT_APP_RCAPTCHA_SITE_KEY} onChange={(token) => {this.props.handleCreateAccountCaptchaChange(token)}} onExpire={(e) => {handleCaptchaExpire()}} />
+                        {
+                            this.state.requestUnderway == "no" && 
+                            <button className="create-account-button" id="create-account-button" onClick={this.createAccount} onMouseEnter={this.loginSignupMouseEnter} onMouseLeave={this.loginSignupMouseLeave} onFocus={this.loginSignupMouseEnter} onBlur={this.loginSignupMouseLeave} >Create Account</button>
+                        }
+                        {
+                            this.state.requestUnderway == "yes" &&
+                            <LoadingAnimation />
+                        }
+                        <button className="go-back-button" onClick={() => this.props.goBackToLogin()}><i className="fa fa-arrow-left"></i></button>
                     </div>
                 }
                 {
@@ -245,7 +277,14 @@ export default class CreateAccount extends React.Component{
                             <label>Activation Code:</label>
                             <input className="form-control" id="account-activation-token" />
                         </span>
-                        <button className="activate-account-button" id="activate-account-button" onMouseEnter={this.loginSignupMouseEnter} onMouseLeave={this.loginSignupMouseLeave} onClick={this.activateAccount} >Activate Account</button>
+                        {
+                            this.state.requestUnderway == "no" &&
+                            <button className="activate-account-button" id="activate-account-button" onMouseEnter={this.loginSignupMouseEnter} onMouseLeave={this.loginSignupMouseLeave} onClick={this.activateAccount} >Activate Account</button>
+                        }
+                        {
+                            this.state.requestUnderway == "yes" &&
+                            <LoadingAnimation />
+                        }
                     </div>
                 }
             </div>

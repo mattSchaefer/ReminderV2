@@ -1,6 +1,6 @@
 class User < ApplicationRecord
     has_secure_password
-    has_many :reminder_users
+    has_many :reminder_users, dependent: :destroy
     has_many :reminders, :through => :reminder_users
     validates :email, presence: true, uniqueness: true
     validates :phone, presence: true, uniqueness: true

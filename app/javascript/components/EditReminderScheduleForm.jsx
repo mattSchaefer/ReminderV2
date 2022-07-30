@@ -26,10 +26,12 @@ export default class EditReminderScheduleForm extends React.Component{
     getAvaliableReminderTimes(){
         const url = "/reminder_times"
         const csrf = document.querySelector('meta[name="csrf-token"]').content
+        var access = this.props.accessToken
         const headers = {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
-            'X-CSRF-Token': csrf
+            'X-CSRF-Token': csrf,
+            'Authorization': 'bearer ' + access
         }
         const options = {
             method: 'GET',
@@ -64,7 +66,7 @@ export default class EditReminderScheduleForm extends React.Component{
             }
         }
         var time_bubbles = time_bubbles_data.map((time_bubble, index) => 
-                <select name={unique_identifier + '-' + index} id={unique_identifier + '-' + index} className="circle">
+                <select name={unique_identifier + '-' + index} id={unique_identifier + '-' + index} className="circle edit-reminder-schedule-select">
                     { this.state.avaliableReminderTimes.map((time) => <option value={time.reminder_time_string ? time.reminder_time_string : ''} className={unique_identifier + '-option'} id={time.reminder_time_string ? unique_identifier + '-' + index + '-' + time.reminder_time_string.replaceAll('.','-').replaceAll(' ', '-') : unique_identifier + '-' + index + '-blank' } onClick={() => this.props.toggleSetReminderTimeValueUI(unique_identifier + '-' + index, time.reminder_time_string || '')}>{time.reminder_time_string}</option>)}
                 </select>
         )

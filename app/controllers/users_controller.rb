@@ -6,12 +6,24 @@ class UsersController < ApplicationController
     end
     def create
         respond_to :json
+        if request.headers['Captcha-Token']
+            token_verification_response = verify_captcha()
+        else
+            token_verification_response = "rcaptcha unauthorized"
+        end
+        if  !token_verification_response["success"]
+            return render json: {message: "unauthorized", status: 400}
+        end
         @user = User.create(user_params)
         @user.activation_token = SecureRandom.hex(10)
         @user.activation_sent_at = Time.now.utc
+        @user.activated = false
+        @user.unconfirmed_email = ""
+        @user.unconfirmed_phone = ""
         if @user.save!
             token = build_token(@user.id)
             # send activation email/sms
+            UserMailer.with(email: user_params[:email], token: @user.activation_token).activate_account_email.deliver_now
             render json: {message: "success", token: token, status: 200}
         else
             render json: {message: "bad", status: 500}
@@ -43,9 +55,10 @@ class UsersController < ApplicationController
             render json: {message: "that token has expired.  please request a new one", status: 204}
             return
         end
-        @user.activated = trued
+        @user.activated = true
         if @user.save!
-            render json: {message: "user successfully activated!", status: 200, email: @user.email, phone: @user.phone, timezone: @user.timezone, carrier: @user.carrier}
+            token = build_token(@user.id)
+            render json: {message: "user successfully activated!", status: 200, id: @user.id, phone: @user.phone, email: @user.email, token: token, timezone: @user.timezone, carrier: @user.carrier, unconfirmed_email: @user.unconfirmed_email, unconfirmed_phone: @user.unconfirmed_phone, activated: @user.activated}
         else
             render json: {message: "there was some issue activating that user", status: 400}
         end
@@ -62,7 +75,9 @@ class UsersController < ApplicationController
         header = request.headers['Authorization'] || ''
         token = header.split(' ').last
         
-        
+        if !token_verification_response["success"]
+            return render json: {message: 'unauthorized', status: 400}
+        end
         if !user_params[:email] || !user_params[:new_email]
             render json: {message: "missing params", status: 400}
             return
@@ -80,19 +95,19 @@ class UsersController < ApplicationController
                 @user.reset_email_sent_at = Time.now.utc
                 if @user.save!
                     @reset_token = @user.reset_email_token
-                    #UserMailer.with(reset_token: @reset_token, old_email: user_params[:email], new_email: user_params[:new_email]).reset_email_email.deliver_now
+                    UserMailer.with(token: @reset_token, old_email: user_params[:email], new_email: user_params[:new_email]).reset_email_email.deliver_now
                     render json: {status: 200, message: 'unconfirmed email set and instructions sent', email: user_params[:new_email], new_token: new_token}, status: :ok
                     #send user reset email token
                 else
-                    render json: {message: "there seems to be some issue", status: 400}
+                    render json: {message: "there seems to be some issue1", status: 400}
                     return
                 end
             else
-                render json: {message: "there seems to be some issue", status: 400}
+                render json: {message: "there seems to be some issue2", status: 400}
                 return
             end
         else
-            render json: {message: "there seems to be some issue", status: 400}
+            render json: {message: "there seems to be some issue3", status: 400, authroized_token_message: authorized_token[:message], user: @user, user_authenticate: @user.authenticate(user_params[:password])}
             return
         end
     end
@@ -112,7 +127,7 @@ class UsersController < ApplicationController
         else
             token_verification_response = "rcaptcha unauthorized"
         end
-        if !user || !user_email_confirmation_token_valid || authorized_token[:message] != 'authorized' 
+        if !user || !user_email_confirmation_token_valid || authorized_token[:message] != 'authorized' || !token_verification_response["success"]
             render json: {error: 'there is an issue with that suspicious link...', status: 401}
         else
             user.email = user.unconfirmed_email
@@ -134,7 +149,9 @@ class UsersController < ApplicationController
         header = request.headers['Authorization'] || ''
         token = header.split(' ').last
         
-        
+        if !token_verification_response["success"]
+            return render json: {message: 'unauthorized', status: 400}
+        end
         if !user_params[:phone] || !user_params[:new_phone]
             render json: {message: "missing params", status: 400}
             return
@@ -152,7 +169,9 @@ class UsersController < ApplicationController
                 @user.reset_phone_sent_at = Time.now.utc
                 if @user.save!
                     @reset_token = @user.reset_phone_token
-                    #UserMailer.with(reset_token: @reset_token, old_email: user_params[:email], new_email: user_params[:new_email]).reset_email_email.deliver_now
+                    
+                    recipient = SMSEasy::Client.sms_address(@user.unconfirmed_phone, @user.carrier)
+                    UserMailer.with(token: @reset_token, old_phone: user_params[:phone], new_phone: user_params[:new_phone], recipient: recipient).reset_phone_email.deliver_now
                     render json: {status: 200, message: 'unconfirmed phone set and instructions sent', phone: user_params[:new_phone], new_token: new_token}, status: :ok
                     #send user reset email token
                 else
@@ -186,7 +205,7 @@ class UsersController < ApplicationController
         else
             token_verification_response = "rcaptcha unauthorized"
         end
-        if !user || !user_phone_confirmation_token_valid || authorized_token[:message] != 'authorized' 
+        if !user || !user_phone_confirmation_token_valid || authorized_token[:message] != 'authorized' || !token_verification_response["success"]
             render json: {error: 'there is an issue with that suspicious link...', status: 401}
         else
             user.phone = user.unconfirmed_phone
@@ -207,14 +226,16 @@ class UsersController < ApplicationController
         else
             token_verification_response = "rcaptcha unauthorized"
         end
+        if !token_verification_response["success"]
+            return render json: {message: 'unauthorized', status: 400}
+        end
         user = User.find_by(email: user_params[:email].downcase)
-        #&& token_verification_response["success"]
-        if user 
+        if user && token_verification_response["success"]
             user.reset_password_token = SecureRandom.hex(10).strip
             user.reset_password_sent_at = Time.now.utc
             if user.save!
                 @reset_token = user.reset_password_token
-                #UserMailer.with(forgot_token: @reset_token, email: user_params[:email]).forgot_password_email.deliver_now
+                UserMailer.with(token: @reset_token, email: user_params[:email]).forgot_password_email.deliver_now
                 render json: {status: 200, reset_token: @reset_token}, status: :ok
             end
         else
@@ -230,6 +251,9 @@ class UsersController < ApplicationController
             token_verification_response = verify_captcha()
         else
             token_verification_response = "rcaptcha unauthorized"
+        end
+        if !token_verification_response["success"]
+            return render json: {message: 'unauthorized', status: 400}
         end
         user = User.find_by(reset_password_token: token)
         valid = ((user.reset_password_sent_at + 4.hours) > Time.now.utc)
@@ -259,7 +283,7 @@ class UsersController < ApplicationController
                 token_verification_response = "rcaptcha unauthorized"
             end
             # && token_verification_response["success"]
-            if user.authenticate(user_params[:old_password]) && authorized_token[:message] == 'authorized'
+            if user.authenticate(user_params[:old_password]) && authorized_token[:message] == 'authorized' && token_verification_response["success"]
                 user.password = user_params[:new_password]
                 user.save!
                 render json: {message: 'good', status: 200, new_token: new_token}
@@ -322,8 +346,82 @@ class UsersController < ApplicationController
             render json: {error: 'error'}
         end
     end
+    def resend_code
+        if(!user_params[:resend_code_type] || (!user_params[:email] && !user_params[:phone]))
+            render json: {message: 'missing param', status: 500}
+            return
+        end
+        resend_type = user_params[:resend_code_type]
+        if resend_type == "email"
+            @user = User.find_by(email: user_params[:email])
+            @user.reset_email_token = SecureRandom.hex(10).strip
+            @user.reset_email_sent_at = Time.now.utc
+            if @user.save!
+                @reset_token = @user.reset_email_token
+                UserMailer.with(token: @reset_token, old_email: user_params[:email], new_email: @user.unconfirmed_email).reset_email_email.deliver_later
+                render json: {message: 'new code sent', status: 200}
+            end
+        elsif resend_type == "phone"
+            @user = User.find_by(phone: user_params[:phone])
+            @user.reset_phone_token = SecureRandom.hex(10).strip
+            @user.reset_phone_sent_at = Time.now.utc
+            if @user.save!
+                @reset_token = @user.reset_phone_token
+                recipient = SMSEasy::Client.sms_address(@user.unconfirmed_phone, @user.carrier)
+                UserMailer.with(token: @reset_token, old_phone: user_params[:phone], new_phone: @user.unconfirmed_phone, recipient: recipient).reset_phone_email.deliver_now
+                render json: {message: 'new code sent', status: 200}
+            end
+        elsif resend_type == "account_activation"
+            @user = User.find_by(email: user_params[:email])
+            @user.activation_token = SecureRandom.hex(10).strip
+            @user.activation_sent_at = Time.now.utc
+            if @user.save!
+                @activation_token = @user.activation_token
+                UserMailer.with(token: @activation_token, email: user_params[:email]).activate_account_email.deliver_later
+                render json: {message: 'new code sent', status: 200}
+            end
+        elsif resend_type == "reset_password"
+            @user = User.find_by(email: user_params[:email])
+            @user.reset_password_token = SecureRandom.hex(10).strip
+            @user.reset_password_sent_at = Time.now.utc
+            if @user.save!
+                @reset_password_token = @user.reset_password_token
+                UserMailer.with(token: @reset_password_token, email: user_params[:email]).reset_password_email.deliver_later
+                render json: {message: 'new code sent', status: 200}
+            end
+        end
+        
+    end
+    def destroy
+        if user_params[:email]
+            user = User.find_by(email: user_params[:email])
+            user_id = user.id
+            header = request.headers['Authorization'] || ''
+            token = header.split(' ').last
+            authorized_token = authorize_token(token, user_id.to_s)
+            if authorized_token[:message] == 'authorized'
+                #reminder_users should be destroyed via model association, but first need to manually destroy the ReminderUserNotificatinoStagers for this user
+                #\/\/\/
+                @reminders_for_user = ReminderUser.where(user_id: user_id)
+                reminder_user_ids = []
+                for reminder_user in @reminders_for_user do
+                    reminder_user_ids.push(reminder_user.id)
+                end
+                stagers = ReminderUserNotificationStager.where(reminder_user_id: reminder_user_ids)
+                stagers.destroy_all
+                #/\/\/\
+                user.destroy
+                render json: {message: 'user destroyed', status: 200}
+                return
+            else
+                render json: {message: 'bad', status: 500}
+            end
+        else
+            render json: {error: 'error'}
+        end
+    end
     private
         def user_params
-            params.permit(:email, :password, :password_confirm, :phone, :carrier, :new_carrier, :timezone, :new_timezone, :activation_token, :user, :new_email, :new_phone, :token, :old_password, :new_password)
+            params.permit(:email, :password, :password_confirm, :phone, :carrier, :new_carrier, :timezone, :new_timezone, :activation_token, :user, :new_email, :new_phone, :token, :old_password, :new_password, :old_email, :resend_code_type)
         end
 end
