@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link, Button, Element, Events, animateScroll as scroll, scrollSpy, scroller } from 'react-scroll'
 
 export default class About extends React.Component{
     constructor(props){
@@ -29,28 +30,29 @@ export default class About extends React.Component{
     render(){
         return(
             <span className="about-section-container">
+                <Element name="about-section-element" className="element-element" />
                 <span className="about-section-element">
-                    <h2 className="white-text about-section-h2 to-the-left">What is PostureCheck?</h2>
+                    <h2 className="white-text about-section-h2 to-the-left about-section-text-shadow">What is PostureCheck?</h2>
                 </span>
                 <span className="about-section-element about-section-element-2">
                     <div className="phone-photo faded"></div>
-                    <p className="white-text about-section-para to-the-right">PostureCheck is a subscription service.  We allow you to subscribe to reminders that help yourself better your health.</p>
+                    <p className="white-text about-section-para to-the-right about-section-text-shadow">PostureCheck is a subscription service.  We allow you to subscribe to reminders that help yourself better your health.</p>
                 </span>
                 <span className="about-section-element about-list">
                     <span>
-                        <h3 className="white-text about-section-h3 to-the-left">We send text messages to your phone in order to help you frequently:</h3> 
+                        <h3 className="white-text about-section-h3 to-the-left about-section-text-shadow">We send text messages to your phone in order to help you frequently:</h3> 
                         <ul className="white-text">
-                            <li className="to-the-left">check your posture</li>
-                            <li className="to-the-left">drink water</li>
-                            <li className="to-the-left">take vitamins/medication</li>
-                            <li className="to-the-left">exercise</li>
+                            <li className="to-the-left about-section-text-shadow">check your posture</li>
+                            <li className="to-the-left about-section-text-shadow">drink water</li>
+                            <li className="to-the-left about-section-text-shadow">take vitamins/medication</li>
+                            <li className="to-the-left about-section-text-shadow">exercise</li>
                         </ul>
-                        <h3 className="white-text to-the-left" id="scroll-down">Scroll down to get started.</h3>
+                        <h3 className="white-text to-the-left about-section-text-shadow" id="scroll-down">Scroll down to get started.</h3>
                     </span>
                     <span className="desk-photo faded"></span>
                 </span>
-                <h2 className="about-section-bottom white-text did-you-know faded">Did you know?</h2>
-                <span className=" about-section-bottom faded"><p id="bottom-text" className="bottom-text where-it-should-be-skewed">{this.state.factList[this.state.activeFactIndex]}</p></span>
+                <h2 className="about-section-bottom white-text did-you-know faded about-section-text-shadow">Did you know?</h2>
+                <span className=" about-section-bottom faded"><p id="bottom-text" className="bottom-text where-it-should-be-skewed about-section-text-shadow">{this.state.factList[this.state.activeFactIndex]}</p></span>
             </span>
         )
     }

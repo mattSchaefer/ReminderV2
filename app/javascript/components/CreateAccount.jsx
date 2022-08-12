@@ -255,7 +255,10 @@ export default class CreateAccount extends React.Component{
                             <label>Show Passwords:</label>
                             <input className="form-control" type="checkbox" id="show-password-checkbox" onChange={this.showPasswordCheckboxChange}></input>
                         </span>
-                        <ReCaptchaV2 id="createAccountSignupCaptcha" sitekey={process.env.REACT_APP_RCAPTCHA_SITE_KEY} onChange={(token) => {this.props.handleCreateAccountCaptchaChange(token)}} onExpire={(e) => {handleCaptchaExpire()}} />
+                        {
+                            this.state.requestUnderway == "no" && 
+                            <ReCaptchaV2 id="createAccountSignupCaptcha" sitekey={process.env.REACT_APP_RCAPTCHA_SITE_KEY} onChange={(token) => {this.props.handleCreateAccountCaptchaChange(token)}} onExpire={(e) => {handleCaptchaExpire()}} />
+                        }
                         {
                             this.state.requestUnderway == "no" && 
                             <button className="create-account-button" id="create-account-button" onClick={this.createAccount} onMouseEnter={this.loginSignupMouseEnter} onMouseLeave={this.loginSignupMouseLeave} onFocus={this.loginSignupMouseEnter} onBlur={this.loginSignupMouseLeave} >Create Account</button>

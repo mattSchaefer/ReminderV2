@@ -41,12 +41,16 @@ video{
     min-width: 100vw;
     min-height: 100vh;
     scale: 1.5;
+    opacity: .6;
 }
 label{
     font-weight: 600;
 }
 input{
     margin-bottom: 1rem;
+}
+input[type='checkbox']{
+    margin-bottom: 0 !important;
 }
 textarea{
     margin-bottom: 1rem;
@@ -61,7 +65,7 @@ textarea{
     color: #666
 }
 .remember-now-header{
-    font-weight: 600;
+    font-weight: 200;
     font-style: italic;
     font-size: 5rem;
     margin-bottom: 0;
@@ -77,7 +81,7 @@ textarea{
     z-index: 30000;
 }
 .reminder-para{
-    font-weight: 600;
+    font-weight: 400;
     font-size: 1.5rem;
     text-shadow: 1px 2px #9d9a91;
 }
@@ -115,6 +119,7 @@ textarea{
     width: 33%;
     font-size: 2rem;
     line-height: 1.2;
+    font-weight: 200 !important;
 }
 li{
     font-size: 2rem;
@@ -130,10 +135,12 @@ label{
 .about-section-h2{
     font-size: 4rem;
     font-style: italic;
+    font-weight: 200;
 }
 .about-section-h3{
     font-size: 3rem;
     width: 33vw;
+    font-weight: 200 !important;
 }
 .about-section-bottom{
     width: 97%;
@@ -142,6 +149,7 @@ label{
     justify-content: flex-end;
     align-items: flex-end;
     color: darkorange;
+    font-weight: 200;
 }
 .account-info-attrs{
     display: flex;
@@ -199,7 +207,7 @@ label{
     background-position: bottom;
 }
 .bottom-text{
-    font-weight: 600;
+    font-weight: 200;
     font-size: 1.5rem;
     text-align: end;
     color: #3474aced;
@@ -217,7 +225,7 @@ section{
     overflow-x: hidden;
     overflow-y: hidden;
 }
-.white-text{color: black;}
+.white-text{color: #333;}
 .login-signup-header-button{
     width: 12rem;
     height: 3rem;
@@ -319,9 +327,17 @@ section{
     cursor: pointer;
     text-decoration: underline;
 }
-.scrolldown-header:hover,.scrolldown-header:focus{
+.scrolldown-header-2{
+    font-weight: 800;
+    position: absolute;
+    bottom: -3.25rem;
+    cursor: pointer;
+    text-decoration: underline;
+}
+.scrolldown-header:hover,.scrolldown-header:focus,.scrolldown-header-2:hover,.scrolldown-header-2:focus{
     font-weight: 900;
     transform: translateY(-2px);
+    color: #eee
 }
 .retract-spring{
     width: 5px !important;
@@ -421,6 +437,10 @@ section{
     cursor: pointer;
     transition: .3s;
 }
+ul{
+    list-style: circle;
+    font-weight: 200;
+}
 .avaliable-reminder-list{
     margin-top: 1rem;
     padding-left: 10px;
@@ -506,9 +526,12 @@ label{
     border: 2px solid rgba(240, 53, 53, 0.81);
     box-shadow: 0px 0px 3px 0px rgba(240, 53, 53, 0.81);
     animation-name: shake; 
-    animation-duration: .5s; 
+    animation-duration: .3s; 
     animation-iteration-count: 1;
-    animation-timing-function: linear;
+    animation-timing-function: ease-out;
+}
+.about-section-text-shadow{
+    /* text-shadow: 1px 1px #eee; */
 }
 #carrier-select, #timezone-select{
     background: white !important;
@@ -738,6 +761,7 @@ hr{
     flex-direction: row;
     justify-content: center;
     align-items: center;
+    margin-bottom: 1rem;
 }
 .green-underline{
     border-bottom: 2px solid green !important;
@@ -824,10 +848,11 @@ hr{
 }
 @media only screen and (max-width: 1200px) {
     video{scale: 1; width: auto;}
-    .remember-now-header{font-size: 2rem;z-index: 30000;}
+    .reminder-para{padding-right: 1rem; line-height: 1.2;}
+    .remember-now-header{font-size: 4rem;z-index: 30000;}
     .header-and-para{z-index: 30000;}
     .about-section-container{margin-left: 0;}
-    .about-section-h2{font-size: 2rem; margin-left: 1rem; margin-top: 11vh;}
+    .about-section-h2{font-size: 3.5rem; margin-left: 1rem; margin-top: 11vh;}
     .about-section-element-2{flex-direction: column; align-items: center;}
     .phone-photo{width: 80vw; height: 80vw;}
     .about-section-para{width: 68%;}

@@ -4,6 +4,8 @@ import Account from '../components/Account'
 import CreateAccount from '../components/CreateAccount'
 import ForgotPassword from '../components/forms/ForgotPassword'
 import ResetPassword from '../components/forms/ResetPassword'
+import { Element, Events, animateScroll as scroll, scrollSpy, scroller } from 'react-scroll'
+
 export default class UserProfile extends React.Component{
     constructor(props){
         super(props)
@@ -77,15 +79,19 @@ export default class UserProfile extends React.Component{
         }
     }
     setEmail(value){
+        this.toggleEditingAccount('')
         this.setState({email: value})
     }
     setPhone(value){
+        this.toggleEditingAccount('')
         this.setState({phone: value})
     }
     setCarrier(value){
+        this.toggleEditingAccount('')
         this.setState({carrier: value})
     }
     setTimezone(value){
+        this.toggleEditingAccount('')
         this.setState({timezone: value})
     }
     toggleCreateAccount(){
@@ -323,6 +329,7 @@ export default class UserProfile extends React.Component{
     render(){
         return (
             <div className="user-profile-container">
+                <Element name="login-section-element" className="element-element" />
                 <div className="info"></div>
                 {this.state.signedIn == "no" && this.state.createAccountToggle == "no" && this.state.forgotPasswordToggle == "no" && this.state.resetPasswordToggle == "no" && <Login toggleCreate={this.toggleCreateAccount} toggleForgotPassword={this.toggleForgotPassword} toggleResetPassword={this.toggleResetPassword} setUser={this.setUser} toggleSignedIn={this.toggleSignedIn} handleLoginCaptchaChange={this.handleLoginCaptchaChange} loginCaptchaToken={this.state.loginCaptchaToken} />}
                 {this.state.signedIn == "no" && this.state.createAccountToggle == "yes" && <CreateAccount toggleCreate={this.toggleCreateAccount} setUser={this.setUser} toggleSignedIn={this.toggleSignedIn} goBackToLogin={this.goBackToLogin} createAccountCaptchaToken={this.state.createAccountCaptchaToken} handleCreateAccountCaptchaChange={this.handleCreateAccountCaptchaChange} />}

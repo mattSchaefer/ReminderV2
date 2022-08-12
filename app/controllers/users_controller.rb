@@ -257,8 +257,8 @@ class UsersController < ApplicationController
         end
         user = User.find_by(reset_password_token: token)
         valid = ((user.reset_password_sent_at + 4.hours) > Time.now.utc)
-        #&& token_verification_response["success"]
-        if user.present? && valid 
+        #
+        if user.present? && valid && token_verification_response["success"]
             user.reset_password_token = nil
             user.password = user_params[:new_password]
             if user.save!

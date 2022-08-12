@@ -1,5 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import { Element, Events, animateScroll as scroll, scrollSpy, scroller } from 'react-scroll'
 import LoadingAnimation from '../components/LoadingAnimation'
 import ReCaptchaV2 from 'react-google-recaptcha';
 require('isomorphic-fetch')
@@ -21,7 +22,10 @@ export default class Login extends React.Component{
         
     }
     componentDidUpdate(prevProps, prevState){
-
+        if(this.state.formError == "yes"){
+            document.getElementById('login-identifier').classList.add('field-error')
+            document.getElementById('login-password').classList.add('field-error')
+        }
     }
     login(){
         var identifier = document.getElementById('login-identifier').value
@@ -89,6 +93,7 @@ export default class Login extends React.Component{
     render(){
         return(
         <div className="login-container">
+            
             <div className="login-form-container faded" id="login-form-container">
                 <span className="login-form-span login-header-span">
                     <h1 className="login-header">Log In</h1>
@@ -106,7 +111,10 @@ export default class Login extends React.Component{
                     <label>Show Password:</label>
                     <input className="form-control" type="checkbox" id="show-password-checkbox" onChange={this.showPasswordCheckboxChange}></input>
                 </span>
-                <ReCaptchaV2 id="loginSignupCaptcha" sitekey={process.env.REACT_APP_RCAPTCHA_SITE_KEY} onChange={(token) => {this.props.handleLoginCaptchaChange(token)}} onExpire={(e) => {handleCaptchaExpire()}} />
+                {
+                    this.state.requestUnderway == "no" &&
+                    <ReCaptchaV2 id="loginSignupCaptcha" sitekey={process.env.REACT_APP_RCAPTCHA_SITE_KEY} onChange={(token) => {this.props.handleLoginCaptchaChange(token)}} onExpire={(e) => {handleCaptchaExpire()}} />
+                }
                 <span className="forgot-reset-password-container">
                     <button to="#" tabIndex="0" className="forgot-password-button" onClick={this.props.toggleForgotPassword}>Forgot password</button>
                     <button to="#" tabIndex="0" className="reset-password-button" onClick={this.props.toggleResetPassword}>Reset password</button>

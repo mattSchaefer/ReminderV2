@@ -138,7 +138,10 @@ export default class EditEmailForm extends React.Component{
                     <label>Show Passwords:</label>
                     <input className="form-control" type="checkbox" id="show-password-checkbox" onChange={this.showPasswordCheckboxChange}></input>
                 </span>
-                <ReCaptchaV2 id="setUnconfirmedEmailCaptcha" sitekey={process.env.REACT_APP_RCAPTCHA_SITE_KEY} onChange={(token) => {this.props.handleSetUnconfirmedEmailCaptchaChange(token)}} onExpire={(e) => {handleCaptchaExpire()}} />
+                {
+                    this.state.requestUnderway == "no" &&
+                    <ReCaptchaV2 id="setUnconfirmedEmailCaptcha" sitekey={process.env.REACT_APP_RCAPTCHA_SITE_KEY} onChange={(token) => {this.props.handleSetUnconfirmedEmailCaptchaChange(token)}} onExpire={(e) => {handleCaptchaExpire()}} />
+                }
                 {
                     this.state.requestUnderway == "no" &&
                     <button id="change-email-button" className="submit-button" onClick={this.setUnconfirmedEmail}>Change Email</button>

@@ -134,7 +134,10 @@ export default class ResetPassword extends React.Component{
                         <label>Show Passwords:</label>
                         <input className="form-control" type="checkbox" id="show-password-checkbox" onChange={this.showPasswordCheckboxChange}></input>
                     </span>
-                    <ReCaptchaV2 id="setResetPasswordCaptcha" sitekey={process.env.REACT_APP_RCAPTCHA_SITE_KEY} onChange={(token) => {this.props.handleResetPasswordCaptchaChange(token)}} onExpire={(e) => {handleCaptchaExpire()}} />
+                    {
+                        this.state.requestUnderway == "no" &&
+                        <ReCaptchaV2 id="setResetPasswordCaptcha" sitekey={process.env.REACT_APP_RCAPTCHA_SITE_KEY} onChange={(token) => {this.props.handleResetPasswordCaptchaChange(token)}} onExpire={(e) => {handleCaptchaExpire()}} />
+                    }
                     <span className="login-form-span reset-password-submit-button-span">
                         {
                             this.state.requestUnderway == "no" &&

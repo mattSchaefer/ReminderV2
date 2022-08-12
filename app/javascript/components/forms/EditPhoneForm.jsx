@@ -130,7 +130,10 @@ export default class EditPhoneForm extends React.Component{
                     <label>Show Passwords:</label>
                     <input className="form-control" type="checkbox" id="show-password-checkbox" onChange={this.showPasswordCheckboxChange}></input>
                 </span>
-                <ReCaptchaV2 id="setUnconfirmedPhoneCaptcha" sitekey={process.env.REACT_APP_RCAPTCHA_SITE_KEY} onChange={(token) => {this.props.handleSetUnconfirmedPhoneCaptchaChange(token)}} onExpire={(e) => {handleCaptchaExpire()}} />
+                {
+                    this.state.requestUnderway == "no" &&
+                    <ReCaptchaV2 id="setUnconfirmedPhoneCaptcha" sitekey={process.env.REACT_APP_RCAPTCHA_SITE_KEY} onChange={(token) => {this.props.handleSetUnconfirmedPhoneCaptchaChange(token)}} onExpire={(e) => {handleCaptchaExpire()}} />
+                }
                 {
                     this.state.requestUnderway == "yes" &&
                     <span className="set-unconfirmed-phone-loading-animation-outer">

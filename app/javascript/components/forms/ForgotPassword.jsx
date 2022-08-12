@@ -64,7 +64,10 @@ export default class ForgotPassword extends React.Component{
                     <label>Email:</label>
                     <input id="forgot-password-email" className="form-control"></input>
                 </span>
-                <ReCaptchaV2 id="setForgotPasswordCaptcha" sitekey={process.env.REACT_APP_RCAPTCHA_SITE_KEY} onChange={(token) => {this.props.handleForgotPasswordCaptchaChange(token)}} onExpire={(e) => {handleCaptchaExpire()}} />
+                {
+                    this.state.requestUnderway == "no" &&
+                    <ReCaptchaV2 id="setForgotPasswordCaptcha" sitekey={process.env.REACT_APP_RCAPTCHA_SITE_KEY} onChange={(token) => {this.props.handleForgotPasswordCaptchaChange(token)}} onExpire={(e) => {handleCaptchaExpire()}} />
+                }
                 <span className="login-form-span forgot-password-submit-button-span">
                     {
                         this.state.requestUnderway == "no" &&

@@ -62,7 +62,7 @@ export default class Home extends React.Component{
         }
     }
     scrollToLoginSection(){
-        scroll.scrollTo(2250)
+        scroll.scrollTo('login-section-element')
     }
     setHomepagePhone(value){
         this.setState({phone: value})
@@ -84,21 +84,28 @@ export default class Home extends React.Component{
                             <span className="skewed-strip"></span>
                             <span className="skewed-strip"></span>
                             <span className="skewed-strip"></span>
-                            <button className="login-signup-header-button" onMouseEnter={this.animateSpring} onMouseLeave={this.putBackSpring} onClick={this.scrollToLoginSection}>
-                                {   
-                                    this.state.phone == "" && 
-                                    <span>Log-in or Sign-up</span>
-                                }
-                                {   
-                                    this.state.phone !== "" && 
-                                    <span>
-                                        <i className="fa fa-user"></i>
-                                        {this.state.phone}
-                                    </span>
-                                }
-                            </button>
+                            <Link to="login-section-element" spy={true} smooth={true} >
+                                <button className="login-signup-header-button" onMouseEnter={this.animateSpring} onMouseLeave={this.putBackSpring} >
+                                {/* onClick={this.scrollToLoginSection} */}
+                                    {   
+                                        this.state.phone == "" && 
+                                        <span>Log-in or Sign-up</span>
+                                    }
+                                    {   
+                                        this.state.phone !== "" && 
+                                        <span>
+                                            <i className="fa fa-user"></i>
+                                            {this.state.phone}
+                                        </span>
+                                    }
+                                </button>
+                            </Link>
                         </span>
-                        <span className="scrolldown-header" onClick={() => scroll.scrollMore(1000)}>Scroll down to learn more <i className="fa fa-arrow-down"></i></span>
+                        <Link to="about-section-element" spy={true} smooth={true} >
+                            {/* onClick={() => scroll.scrollMore(1000)} */}
+                            <span className="scrolldown-header" >Scroll down to learn more <i className="fa fa-arrow-down"></i></span>
+                        </Link>
+                        <span className="scrolldown-header-2" onClick={() => scroll.scrollToBottom()}>Contact/Donate<i className="fa fa-arrow-down"></i></span>
                     </span>
                     <VideoPlayer />
                 </section>
