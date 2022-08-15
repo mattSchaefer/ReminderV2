@@ -84,7 +84,7 @@ export default class Home extends React.Component{
                             <span className="skewed-strip"></span>
                             <span className="skewed-strip"></span>
                             <span className="skewed-strip"></span>
-                            <Link to="login-section-element" spy={true} smooth={true} >
+                            <Link to="login-section-element" className="scroll-link" spy={true} smooth={true} >
                                 <button className="login-signup-header-button" onMouseEnter={this.animateSpring} onMouseLeave={this.putBackSpring} >
                                 {/* onClick={this.scrollToLoginSection} */}
                                     {   

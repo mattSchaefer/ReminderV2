@@ -23,7 +23,7 @@
 set :output, "log/cron.log" 
 
 #Sets the environment to run during development mode (Set to production by default)
-set :environment, "development"
+#set :environment, "development"
 
 # every 1.day, :at => '0:05 am' do
 #     runner "ReminderUserNotificationStager.stage_for_the_day"
