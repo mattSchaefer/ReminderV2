@@ -42,7 +42,7 @@ module Token
             render json: {exception: exception}
         end
         def secret
-            Rails.application.secrets.secret_key_base
+            ENV['SECRET_KEY_BASE']
         end
     private
         
