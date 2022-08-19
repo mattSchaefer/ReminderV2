@@ -26,6 +26,9 @@ gem 'whenever', require: false
 gem "httparty"
 gem 'figaro'
 gem 'sms-easy'
+
+gem "sidekiq", "~> 6.5"
+gem "sidekiq-cron"
 # Use Active Storage variant
 # gem 'image_processing', '~> 1.2'
 
